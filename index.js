@@ -1,51 +1,75 @@
-function sqlStamp(sqlTemplate, data, templates) {
+function chomp(str) {
+  return str.replace(/^\s*|\s*$/g, "");
+}
+
+function sqlStamp(sqlTemplate, data, _templates) {
   var args = [];
+  var templates = {};
   data = data || {};
-  templates = templates || {};
 
-  var sql = sqlTemplate.replace(/{[^}]+}/g, function(item) {
-    var isRaw;
-    var k = item.slice(1, -1);
+  // Clean our templates
+  for(var key in _templates) {
+    templates[key] = chomp(_templates[key]);
+  }
 
-    if(k.match(/^>/)) {
-      k = k.slice(1).replace(/^\s*|\s*$/g, "");
-      if(!templates.hasOwnProperty(k)) {
-        throw "No such template '"+k+"'";
-      }
+  // Helper assertions
+  function assertData(k) {
+    if(!data.hasOwnProperty(k)) {
+      throw "Missing key '"+k+"'";
+    }
+  }
 
-      var tmpl = templates[k].replace(/^\s*|\s*$/g, "");
+  function assertTemplate(key) {
+    if(!templates.hasOwnProperty(key)) {
+      throw "No such template '"+key+"'";
+    }
+  }
 
+  // Validations
+  var checks = {
+    "?": assertData,
+    "!": assertData,
+    ">": assertTemplate,
+    "default": assertData
+  };
+
+  // Operations
+  var operators = {
+    ">": function(key) {
       // Recurse
-      var ret = sqlStamp(tmpl, data, templates);
+      var template = templates[key];
+      var ret = sqlStamp(template, data, templates);
 
       // Add args in
-      args = args.concat(ret.args);
+      args.push.apply(args, ret.args);
       return ret.sql;
-    }
-
-    if(k.match(/^\?/)) {
-      k = k.slice(1);
-      if(data[k]) {
+    },
+    "?": function(key) {
+      if(data[key]) {
         return "true";
       } else {
         return "false";
       }
-    }
-
-    if(k.match(/^\!/)) {
-      k = k.slice(1);
-      isRaw = true;
-    }
-
-    if(!data.hasOwnProperty(k)) {
-      throw "Missing key '"+k+"'";
-    }
-
-    if(isRaw) {
-      return data[k];
-    } else {
-      args.push(data[k]);
+    },
+    "!": function(key) {
+      return data[key];
+    },
+    "default": function(key) {
+      args.push(data[key]);
       return "?";
+    }
+  }
+
+  var sql = sqlTemplate.replace(/{([>?!]?)([^}]+)}/g, function(item) {
+    // Check for operator
+    var type = RegExp.$1 || "default";
+    var key  = chomp(RegExp.$2);
+
+    if(operators[type]) {
+      if(checks[type]) {
+        checks[type](key);
+      }
+      return operators[type](key);
     }
   });
 
