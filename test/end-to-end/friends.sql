@@ -1,1 +1,1 @@
-select * from friends where fromId = {userId}
+select * from friends where fromId = {accountId}

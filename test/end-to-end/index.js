@@ -12,7 +12,7 @@ var data = fetchData({
 describe("end-to-end", function() {
   it("should work", function() {
     var out = sqlStamp(data.example, {
-      userId: 1,
+      accountId: 1,
       filterEnabled: true,
       filterKey: "role",
       filterVal: "dev"

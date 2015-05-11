@@ -4,10 +4,10 @@ WITH friend AS (
 select
   *
 from
-  user
+  account
 where
-  user.id = friend.toId
-  AND user.status = "active"
+  account.id = friend.toId
+  AND account.status = "active"
   AND (
     {?filterEnabled} AND {!filterKey} = {filterVal}
   )
