@@ -8,8 +8,10 @@ function sqlStamp(sqlTemplate, data, _templates) {
   data = data || {};
 
   // Clean our templates
-  for(var key in _templates) {
-    templates[key] = chomp(_templates[key]);
+  if(_templates) {
+    Object.keys(_templates).forEach(function(key) {
+      templates[key] = chomp(_templates[key]);
+    });
   }
 
   // Helper assertions
