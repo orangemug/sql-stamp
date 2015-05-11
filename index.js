@@ -60,7 +60,7 @@ function sqlStamp(sqlTemplate, data, _templates) {
       args.push(data[key]);
       return "?";
     }
-  }
+  };
 
   var sql = sqlTemplate.replace(/{([>?!]?)([^}]+)}/g, function() {
     // Check for operator
