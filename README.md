@@ -20,6 +20,9 @@ So for example given the following file which selects all friends with a `userId
     /* ./friends.sql */
     select * from friends where fromId = {userId}
 
+And the following uses this as a CTE (<http://www.postgresql.org/docs/9.1/static/queries-with.html>) via a "require"
+
+    /* ./example.sql */
     WITH friend AS (
       {> ./friends.sql}
     )
@@ -34,9 +37,39 @@ So for example given the following file which selects all friends with a `userId
         {?filterEnabled} AND {!filterKey} = {filterVal}
       )
 
+When we run the following
+
+    var out = sqlStamp(/* example.sql as string */, {
+      userId: 1,
+      filterEnabled: true,
+      filterKey: "role",
+      filterVal: "dev"
+    }, {
+      "./friends.sql": /* friends.sql as string */
+    });
+
 The following will be returned
 
-    TODO
+    {
+      args: [1, "dev"],
+      sql: /* SQL in comment below */
+      /**
+       * WITH friend AS (
+       *   select * from friends where fromId = ?
+       * )
+       * select
+       *   *
+       * from
+       *   user
+       * where
+       *   user.id = friend.toId
+       *   AND user.status = "active"
+       *   AND (
+       *     true AND role = ?
+       *   )
+       */
+    }
+
 
 ## Install
 
