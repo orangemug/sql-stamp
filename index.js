@@ -62,7 +62,7 @@ function sqlStamp(sqlTemplate, data, _templates) {
     }
   }
 
-  var sql = sqlTemplate.replace(/{([>?!]?)([^}]+)}/g, function(item) {
+  var sql = sqlTemplate.replace(/{([>?!]?)([^}]+)}/g, function() {
     // Check for operator
     var type = RegExp.$1 || "default";
     var key  = chomp(RegExp.$2);
