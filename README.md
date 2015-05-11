@@ -9,6 +9,11 @@ It supports the following conditionals:
  * `{?key}` - Feature switch
 
 
+## Install
+
+    npm i git://github.com/orangemug/sql-stamp.git --save
+
+
 ## API
 The basic API is as follows
 
@@ -69,11 +74,6 @@ The following will be returned
        *   )
        */
     }
-
-
-## Install
-
-    npm i git://github.com/orangemug/sql-stamp.git --save
 
 
 ## Test
