@@ -1,4 +1,6 @@
-# sql-stamp [![Build Status](https://travis-ci.org/orangemug/sql-stamp.svg?branch=master)](https://travis-ci.org/orangemug/sql-stamp) [![Coverage Status](https://coveralls.io/repos/orangemug/sql-stamp/badge.svg)](https://coveralls.io/r/orangemug/sql-stamp) [![Code Climate](https://codeclimate.com/github/orangemug/sql-stamp/badges/gpa.svg)](https://codeclimate.com/github/orangemug/sql-stamp)
+# sql-stamp
+[![Build Status](https://travis-ci.org/orangemug/sql-stamp.svg?branch=master)](https://travis-ci.org/orangemug/sql-stamp) [![Coverage Status](https://coveralls.io/repos/orangemug/sql-stamp/badge.svg)](https://coveralls.io/r/orangemug/sql-stamp) [![Code Climate](https://codeclimate.com/github/orangemug/sql-stamp/badges/gpa.svg)](https://codeclimate.com/github/orangemug/sql-stamp)
+
 The tiny SQL templater, with the aim to be as simple as possible as to not get in the way of you writing SQL.
 
 It supports the following conditionals:
