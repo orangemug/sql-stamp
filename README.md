@@ -73,12 +73,12 @@ The following will be returned
 
 ## Install
 
-  npm i git://github.com/orangemug/sql-stamp.git --save
+    npm i git://github.com/orangemug/sql-stamp.git --save
 
 
 ## Test
 
-  npm test
+    npm test
 
 
 ## License
