@@ -9,5 +9,5 @@ where
   account.id = friend.toId
   AND account.status = "active"
   AND (
-    false OR role = ?
+    /*filter:filterDisabled*/ false OR role = ?
   )

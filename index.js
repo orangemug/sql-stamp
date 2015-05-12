@@ -47,11 +47,13 @@ function sqlStamp(sqlTemplate, data, _templates) {
       return ret.sql;
     },
     "?": function(key) {
+      var out = "/*filter:"+key+"*/ "
       if(data[key]) {
-        return "true";
+        out += "true";
       } else {
-        return "false";
+        out += "false";
       }
+      return out;
     },
     "!": function(key) {
       return data[key];
