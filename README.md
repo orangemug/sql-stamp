@@ -72,7 +72,7 @@ The following will be returned
        *   user.id = friend.toId
        *   AND user.status = "active"
        *   AND (
-       *     false AND role = ?
+       *     /*feature:filterDisabled*/ false AND role = ?
        *   )
        */
     }
