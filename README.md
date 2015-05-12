@@ -41,14 +41,14 @@ And the following uses this as a CTE (<http://www.postgresql.org/docs/9.1/static
       user.id = friend.toId
       AND user.status = "active"
       AND (
-        {?filterEnabled} AND {!filterKey} = {filterVal}
+        {?filterDisabled} OR {!filterKey} = {filterVal}
       )
 
 When we run the following
 
     var out = sqlStamp(/* example.sql as string */, {
       userId: 1,
-      filterEnabled: true,
+      filterDisabled: false,
       filterKey: "role",
       filterVal: "dev"
     }, {
@@ -72,7 +72,7 @@ The following will be returned
        *   user.id = friend.toId
        *   AND user.status = "active"
        *   AND (
-       *     true AND role = ?
+       *     false AND role = ?
        *   )
        */
     }

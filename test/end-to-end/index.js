@@ -13,7 +13,7 @@ describe("end-to-end", function() {
   it("should work", function() {
     var out = sqlStamp(data.example, {
       accountId: 1,
-      filterEnabled: true,
+      filterDisabled: false,
       filterKey: "role",
       filterVal: "dev"
     }, {

@@ -5,5 +5,5 @@ from
 where
   status = "active"
   AND (
-    true AND text LIKE "foo%"
+    false OR text LIKE "foo%"
   )

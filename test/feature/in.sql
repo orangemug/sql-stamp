@@ -5,5 +5,5 @@ from
 where
   status = "active"
   AND (
-    {?enableSearch} AND text LIKE "foo%"
+    {?searchDisabled} OR text LIKE "foo%"
   )

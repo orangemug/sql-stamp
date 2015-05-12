@@ -12,7 +12,7 @@ var data = fetchData({
 describe("feature", function() {
   it("should enable on truthy", function() {
     var out = sqlStamp(data.in, {
-      enableSearch: true
+      searchDisabled: false
     });
 
     assert.equal(out.args.length, 0);
@@ -21,7 +21,7 @@ describe("feature", function() {
 
   it("should enable on falsey", function() {
     var out = sqlStamp(data.in, {
-      enableSearch: false
+      searchDisabled: true
     });
 
     assert.equal(out.args.length, 0);
