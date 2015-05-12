@@ -47,7 +47,7 @@ function sqlStamp(sqlTemplate, data, _templates) {
       return ret.sql;
     },
     "?": function(key) {
-      var out = "/*feature:"+key+"*/ "
+      var out = "/*feature:"+key+"*/ ";
       if(data[key]) {
         out += "true";
       } else {
