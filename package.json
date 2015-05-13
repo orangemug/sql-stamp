@@ -14,9 +14,11 @@
     }
   },
   "dependencies": {
-    "mocha": "^2.2.4"
+    "lodash": "^3.8.0",
+    "yargs": "^3.9.0"
   },
   "devDependencies": {
+    "mocha": "^2.2.4",
     "blanket": "^1.1.7",
     "coveralls": "^2.11.2",
     "mocha-lcov-reporter": "0.0.2"

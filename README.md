@@ -78,6 +78,16 @@ The following will be returned
     }
 
 
+## CLI
+You also have a CLI available to you to render templates from the command line
+
+    $ sql-stamp --searchDisabled foo ./test/feature/in.sql
+
+If you want to run this command you can pipe it into [knex-sql](http://github.com/orangemug/knex-sql)
+
+    $ sql-stamp --searchDisabled foo ./test/feature/in.sql | knex-sql
+
+
 ## Test
 
     npm test
