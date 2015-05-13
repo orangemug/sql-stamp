@@ -79,14 +79,12 @@ The following will be returned
 
 
 ## CLI
-You also have a CLI available to you to render templates from the command line (doesn't currently support nesting)
+You also have a CLI available to you to render templates from the command line
 
-    $ sql-stamp ./test/param/in.sql --name orangemug --role dev
+    $ sql-stamp ./test/require/in.sql --name orangemug
     {
-      "sql": "select\n  *\nfrom\n  account\nwhere\n      name = ?\n  AND role = ?\n  AND fullname = ?\n",
+      "sql": "WITH some_cte AS (select * from account where name = ?)\nselect * from some_cte\n",
       "args": [
-        "orangemug",
-        "dev",
         "orangemug"
       ]
     }
