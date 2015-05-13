@@ -5,6 +5,7 @@ var sqlStamp = require("../../");
 var data = fetchData({
   in: "/in.sql",
   inSub: "/in_sub.sql",
+  inSubNested: "/in_sub_nested.sql",
   out: "/out.sql"
 }, __dirname);
 
@@ -12,9 +13,13 @@ var data = fetchData({
 describe("require", function() {
   it("should work", function() {
     var out = sqlStamp(data.in, {
-      name: "orangemug"
+      name: "orangemug",
+      nested_var: {
+        foo: "bar"
+      }
     }, {
-      "./in_sub.sql": data.inSub
+      "./in_sub.sql": data.inSub,
+      "./in_sub_nested.sql": data.inSubNested
     });
 
     assert.equal(out.args.length, 1);
