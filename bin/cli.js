@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 var fs       = require("fs");
 var lodash   = require("lodash");
 var sqlStamp = require("../");
