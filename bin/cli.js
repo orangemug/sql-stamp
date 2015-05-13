@@ -7,7 +7,7 @@ var Bluebird = require("bluebird");
 var sqlStamp = require("../");
 
 fs = Bluebird.promisifyAll(fs);
-globAsync = Bluebird.promisify(glob);
+var globAsync = Bluebird.promisify(glob);
 
 var argv = require('yargs')
   .usage('Usage: $0 [args] [sql-file] [args-file]')
