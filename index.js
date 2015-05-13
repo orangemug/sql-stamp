@@ -37,10 +37,17 @@ function sqlStamp(sqlTemplate, data, _templates) {
 
   // Operations
   var operators = {
-    ">": function(key) {
+    ">": function(path, dataKey) {
+      var templateData;
+      if(dataKey) {
+        templateData = data[dataKey];
+      } else {
+        templateData = data;
+      }
+
       // Recurse
-      var template = templates[key];
-      var ret = sqlStamp(template, data, templates);
+      var template = templates[path];
+      var ret = sqlStamp(template, templateData, templates);
 
       // Add args in
       args.push.apply(args, ret.args);
@@ -67,13 +74,13 @@ function sqlStamp(sqlTemplate, data, _templates) {
   var sql = sqlTemplate.replace(/{([>?!]?)([^}]+)}/g, function() {
     // Check for operator
     var type = RegExp.$1 || "default";
-    var key  = chomp(RegExp.$2);
+    var fnArgs = RegExp.$2.split(",").map(chomp);
 
     if(operators[type]) {
       if(checks[type]) {
-        checks[type](key);
+        checks[type].apply(null, fnArgs);
       }
-      return operators[type](key);
+      return operators[type].apply(null, fnArgs);
     }
   });
 
