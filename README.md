@@ -79,7 +79,7 @@ The following will be returned
 
 
 ## CLI
-You also have a CLI available to you to render templates from the command line
+You also have a CLI available to you to render templates from the command line (doesn't currently support nesting)
 
     $ sql-stamp ./test/param/in.sql --name orangemug --role dev
     {
