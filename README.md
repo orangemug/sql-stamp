@@ -7,7 +7,7 @@ It supports the following conditionals:
 
  * `{key}`  - Turns into `?` with the correct ordering in the returned args (so safe for user input)
  * `{!key}` - Passed raw into the SQL
- * `{>key}` - Require file from the templates hash
+ * `{>path, optionalDataObject}` - Require file from the templates hash
  * `{?key}` - Feature switch
 
 
