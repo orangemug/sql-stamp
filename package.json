@@ -1,6 +1,9 @@
 {
   "name": "sql-stamp",
   "version": "0.2.0",
+  "bin": {
+    "sql-stamp": "./bin/cli.js"
+  },
   "scripts": {
     "test": "mocha test/index.js",
     "coveralls": "NODE_ENV=test ./node_modules/.bin/mocha -r blanket --reporter mocha-lcov-reporter test/index.js | ./node_modules/coveralls/bin/coveralls.js"
