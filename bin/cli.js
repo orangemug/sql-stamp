@@ -7,6 +7,7 @@ var Bluebird = require("bluebird");
 var sqlStamp = require("../");
 
 fs = Bluebird.promisifyAll(fs);
+globAsync = Bluebird.promisify(glob);
 
 var argv = require('yargs')
   .usage('Usage: $0 [args] [sql-file] [args-file]')
@@ -36,34 +37,27 @@ for(var k in argv) {
 }
 
 // Fetch the templates
-function getTemplates(dirpath, done) {
-  glob(dirpath+"/**/*.sql", {}, function(err, files) {
-    if(err) {
-      done(err);
-      return;
-    }
-
+function getTemplates(dirpath) {
+  return globAsync(dirpath+"/**/*.sql", {}).then(function(files) {
     var out = {};
-    var data = Bluebird.each(files, function(filepath) {
+    return Bluebird.each(files, function(filepath) {
       var relpath = "./"+path.relative(dirpath, filepath);
       return fs.readFileAsync(filepath).then(function(data) {
         out[relpath] = data.toString();
       });
-    }).then(function(data) {
-      done(undefined, out);
-    }).catch(function(err) {
-      done(err);
-    })
+    }).then(function() {
+      return out;
+    });
   });
 }
 
-getTemplates(sqlBasename, function(err, templates) {
-  if(err) {
-    throw err;
-  }
-
-  var sql = sqlStamp(sqlTemplate, data, templates)
-  console.log(
-    JSON.stringify(sql, null, "  ")
-  );
-});
+getTemplates(sqlBasename)
+  .then(function(templates) {
+    var sql = sqlStamp(sqlTemplate, data, templates)
+    console.log(
+      JSON.stringify(sql, null, "  ")
+    );
+  })
+  .catch(function(err) {
+    console.error(err);
+  });
