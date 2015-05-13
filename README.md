@@ -78,6 +78,18 @@ The following will be returned
     }
 
 
+## CLI
+You also have a CLI available to you to render templates from the command line
+
+    $ sql-stamp ./test/require/in.sql --name orangemug
+    {
+      "sql": "WITH some_cte AS (select * from account where name = ?)\nselect * from some_cte\n",
+      "args": [
+        "orangemug"
+      ]
+    }
+
+
 ## Test
 
     npm test
