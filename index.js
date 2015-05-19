@@ -1,5 +1,13 @@
 function chomp(str) {
-  return str.replace(/^\s*|\s*$/g, "");
+  return str
+    .replace(/^\s*|\s*$/g, "");
+}
+
+function removeQuotes(str) {
+  if(str === undefined) {
+    return;
+  }
+  return str.replace(/^"|"$/g, "");
 }
 
 function sqlStamp(sqlTemplate, data, _templates) {
@@ -15,9 +23,13 @@ function sqlStamp(sqlTemplate, data, _templates) {
   }
 
   // Helper assertions
-  function assertData(k) {
+  function assertData(k, dflt) {
     if(!data.hasOwnProperty(k)) {
-      throw "Missing key '"+k+"'";
+      if(dflt !== undefined) {
+        data[k] = removeQuotes(dflt)
+      } else {
+        throw "Missing key '"+k+"'";
+      }
     }
   }
 
@@ -53,12 +65,12 @@ function sqlStamp(sqlTemplate, data, _templates) {
       args.push.apply(args, ret.args);
       return ret.sql;
     },
-    "?": function(key) {
+    "?": function(key, replaceA, replaceB) {
       var out = "/*feature:"+key+"*/ ";
       if(data[key]) {
-        out += "true";
+        out += removeQuotes(replaceA) || "true";
       } else {
-        out += "false";
+        out += removeQuotes(replaceB) || "false";
       }
       return out;
     },
