@@ -24,12 +24,8 @@ function sqlStamp(sqlTemplate, data, _templates) {
 
   // Helper assertions
   function assertData(k, dflt) {
-    if(!data.hasOwnProperty(k)) {
-      if(dflt !== undefined) {
-        data[k] = removeQuotes(dflt)
-      } else {
-        throw "Missing key '"+k+"'";
-      }
+    if(!data.hasOwnProperty(k) && dflt === undefined) {
+      throw "Missing key '"+k+"'";
     }
   }
 
@@ -74,11 +70,19 @@ function sqlStamp(sqlTemplate, data, _templates) {
       }
       return out;
     },
-    "!": function(key) {
-      return data[key];
+    "!": function(key, dflt) {
+      if(data.hasOwnProperty(key)) {
+        return data[key];
+      } else {
+        return dflt;
+      }
     },
-    "default": function(key) {
-      args.push(data[key]);
+    "default": function(key, dflt) {
+      if(data.hasOwnProperty(key)) {
+        args.push(data[key]);
+      } else {
+        args.push(dflt);
+      }
       return "?";
     }
   };
