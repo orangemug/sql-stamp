@@ -1,4 +1,5 @@
 var util = require("./lib/util");
+var operators = require("./lib/operators");
 
 
 function sqlStamp(sqlTemplate, data, _templates) {
@@ -13,83 +14,36 @@ function sqlStamp(sqlTemplate, data, _templates) {
     });
   }
 
-  // Helper assertions
-  function assertData(k, dflt) {
-    if(!data.hasOwnProperty(k) && dflt === undefined) {
-      throw "Missing key '"+k+"'";
-    }
-  }
-
-  function assertTemplate(key) {
-    if(!templates.hasOwnProperty(key)) {
-      throw "No such template '"+key+"'";
-    }
-  }
-
-  // Validations
-  var checks = {
-    "?": assertData,
-    "!": assertData,
-    ">": assertTemplate,
-    "default": assertData
-  };
-
-  // Operations
-  var operators = {
-    ">": function(path, dataKey) {
-      var templateData;
-      if(dataKey) {
-        templateData = data[dataKey];
-      } else {
-        templateData = data;
-      }
-
-      // Recurse
-      var template = templates[path];
-      var ret = sqlStamp(template, templateData, templates);
-
-      // Add args in
-      args.push.apply(args, ret.args);
-      return ret.sql;
-    },
-    "?": function(key, replaceA, replaceB) {
-      var out = "/*feature:"+key+"*/ ";
-      if(data[key]) {
-        out += replaceA || "true";
-      } else {
-        out += replaceB || "false";
-      }
-      return out;
-    },
-    "!": function(key, dflt) {
-      if(data.hasOwnProperty(key)) {
-        return data[key];
-      } else {
-        return dflt;
-      }
-    },
-    "default": function(key, dflt) {
-      if(data.hasOwnProperty(key)) {
-        args.push(data[key]);
-      } else {
-        args.push(dflt);
-      }
-      return "?";
-    }
+  var ctx = {
+    self: sqlStamp,
+    templates: templates,
+    data: data
   };
 
   var sql = sqlTemplate.replace(/{([>?!]?)([^}]+)}/g, function() {
     // Check for operator
-    var type = RegExp.$1 || "default";
-    var fnArgs = RegExp.$2.split(",")
+    var type   = RegExp.$1;
+    var operatorArgs = RegExp.$2.split(",")
       .map(util.chomp)
       .map(util.removeQuotes);
 
-    if(operators[type]) {
-      if(checks[type]) {
-        checks[type].apply(null, fnArgs);
+    var fnArgs = [ctx].concat(operatorArgs);
+    var operator = operators[type];
+
+    if(operator) {
+      operator.check.apply(null, fnArgs);
+
+      var out = operator.fn.apply(null, fnArgs);
+      if(out.args) {
+        if(Array.isArray(out.args)) {
+          args.push.apply(args, out.args);
+        } else {
+          args.push(out.args);
+        }
       }
-      return operators[type].apply(null, fnArgs);
+      return out.text;
+    } else {
+      throw "Invalid operator";
     }
   });
 
