@@ -64,9 +64,9 @@ function sqlStamp(sqlTemplate, data, _templates) {
     "?": function(key, replaceA, replaceB) {
       var out = "/*feature:"+key+"*/ ";
       if(data[key]) {
-        out += removeQuotes(replaceA) || "true";
+        out += replaceA || "true";
       } else {
-        out += removeQuotes(replaceB) || "false";
+        out += replaceB || "false";
       }
       return out;
     },
@@ -74,14 +74,14 @@ function sqlStamp(sqlTemplate, data, _templates) {
       if(data.hasOwnProperty(key)) {
         return data[key];
       } else {
-        return removeQuotes(dflt);
+        return dflt;
       }
     },
     "default": function(key, dflt) {
       if(data.hasOwnProperty(key)) {
         args.push(data[key]);
       } else {
-        args.push(removeQuotes(dflt));
+        args.push(dflt);
       }
       return "?";
     }
@@ -90,7 +90,9 @@ function sqlStamp(sqlTemplate, data, _templates) {
   var sql = sqlTemplate.replace(/{([>?!]?)([^}]+)}/g, function() {
     // Check for operator
     var type = RegExp.$1 || "default";
-    var fnArgs = RegExp.$2.split(",").map(chomp);
+    var fnArgs = RegExp.$2.split(",")
+      .map(chomp)
+      .map(removeQuotes);
 
     if(operators[type]) {
       if(checks[type]) {
