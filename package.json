@@ -19,7 +19,6 @@
   "dependencies": {
     "bluebird": "^2.9.25",
     "glob": "^5.0.6",
-    "lodash": "^3.8.0",
     "yargs": "^3.9.0"
   },
   "devDependencies": {

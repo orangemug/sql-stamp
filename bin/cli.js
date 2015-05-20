@@ -2,7 +2,6 @@
 var fs       = require("fs");
 var path     = require("path");
 var glob     = require("glob");
-var lodash   = require("lodash");
 var Bluebird = require("bluebird");
 var sqlStamp = require("../");
 
