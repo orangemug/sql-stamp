@@ -5,10 +5,10 @@ The tiny SQL templater, with the aim to be as simple as possible as to not get i
 
 It supports the following conditionals:
 
- * `{key}`  - Turns into `?` with the correct ordering in the returned args (so safe for user input)
- * `{!key}` - Passed raw into the SQL
+ * `{key, default}`  - Turns into `?` with the correct ordering in the returned args (so safe for user input)
+ * `{!key, default}` - Passed raw into the SQL
  * `{>path, optionalDataObject}` - Require file from the templates hash
- * `{?key}` - Feature switch
+ * `{?key, replaceA, replaceB}` - Feature switch
 
 
 ## Install

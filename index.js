@@ -1,5 +1,13 @@
 function chomp(str) {
-  return str.replace(/^\s*|\s*$/g, "");
+  return str
+    .replace(/^\s*|\s*$/g, "");
+}
+
+function removeQuotes(str) {
+  if(str === undefined) {
+    return;
+  }
+  return str.replace(/^"|"$/g, "");
 }
 
 function sqlStamp(sqlTemplate, data, _templates) {
@@ -15,8 +23,8 @@ function sqlStamp(sqlTemplate, data, _templates) {
   }
 
   // Helper assertions
-  function assertData(k) {
-    if(!data.hasOwnProperty(k)) {
+  function assertData(k, dflt) {
+    if(!data.hasOwnProperty(k) && dflt === undefined) {
       throw "Missing key '"+k+"'";
     }
   }
@@ -53,20 +61,28 @@ function sqlStamp(sqlTemplate, data, _templates) {
       args.push.apply(args, ret.args);
       return ret.sql;
     },
-    "?": function(key) {
+    "?": function(key, replaceA, replaceB) {
       var out = "/*feature:"+key+"*/ ";
       if(data[key]) {
-        out += "true";
+        out += removeQuotes(replaceA) || "true";
       } else {
-        out += "false";
+        out += removeQuotes(replaceB) || "false";
       }
       return out;
     },
-    "!": function(key) {
-      return data[key];
+    "!": function(key, dflt) {
+      if(data.hasOwnProperty(key)) {
+        return data[key];
+      } else {
+        return removeQuotes(dflt);
+      }
     },
-    "default": function(key) {
-      args.push(data[key]);
+    "default": function(key, dflt) {
+      if(data.hasOwnProperty(key)) {
+        args.push(data[key]);
+      } else {
+        args.push(removeQuotes(dflt));
+      }
       return "?";
     }
   };
