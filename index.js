@@ -1,14 +1,5 @@
-function chomp(str) {
-  return str
-    .replace(/^\s*|\s*$/g, "");
-}
+var util = require("./lib/util");
 
-function removeQuotes(str) {
-  if(str === undefined) {
-    return;
-  }
-  return str.replace(/^"|"$/g, "");
-}
 
 function sqlStamp(sqlTemplate, data, _templates) {
   var args = [];
@@ -18,7 +9,7 @@ function sqlStamp(sqlTemplate, data, _templates) {
   // Clean our templates
   if(_templates) {
     Object.keys(_templates).forEach(function(key) {
-      templates[key] = chomp(_templates[key]);
+      templates[key] = util.chomp(_templates[key]);
     });
   }
 
@@ -91,8 +82,8 @@ function sqlStamp(sqlTemplate, data, _templates) {
     // Check for operator
     var type = RegExp.$1 || "default";
     var fnArgs = RegExp.$2.split(",")
-      .map(chomp)
-      .map(removeQuotes);
+      .map(util.chomp)
+      .map(util.removeQuotes);
 
     if(operators[type]) {
       if(checks[type]) {
