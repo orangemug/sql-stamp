@@ -74,14 +74,14 @@ function sqlStamp(sqlTemplate, data, _templates) {
       if(data.hasOwnProperty(key)) {
         return data[key];
       } else {
-        return dflt;
+        return removeQuotes(dflt);
       }
     },
     "default": function(key, dflt) {
       if(data.hasOwnProperty(key)) {
         args.push(data[key]);
       } else {
-        args.push(dflt);
+        args.push(removeQuotes(dflt));
       }
       return "?";
     }
