@@ -2,6 +2,7 @@ var fs             = require("fs");
 var assert         = require("assert");
 var fetchTemplates = require("./fetch-templates");
 var sqlStamp       = require("../../");
+var util           = require("../../lib/util");
 
 
 module.exports = function(basePath, templates, results, cb) {
@@ -10,7 +11,7 @@ module.exports = function(basePath, templates, results, cb) {
 
   var resultObj = {};
   results = results.forEach(function(filepath) {
-    resultObj[filepath] = fs.readFileSync(basePath+"/"+filepath).toString();
+    resultObj[filepath] = util.chomp(fs.readFileSync(basePath+"/"+filepath).toString());
   });
 
   cb(tmpl, resultObj);

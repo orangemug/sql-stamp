@@ -32,7 +32,7 @@ function sqlStamp(_templates) {
   var templates = {};
   for(key in _templates) {
     var template = _templates[key];
-    var fn = genTemplateFn(template);
+    var fn = genTemplateFn(util.chomp(template));
     templates[util.chomp(key)] = fn;
   }
 

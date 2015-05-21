@@ -11,8 +11,8 @@ var resultDef = [
   "./out.sql"
 ]
 
-genTest(__dirname, templateDef, resultDef, function(tmpl, results) {
-	describe("require", function() {
+describe("require", function() {
+	genTest(__dirname, templateDef, resultDef, function(tmpl, results) {
 		it("should work", function() {
 			var out = tmpl("./in.sql", {
 				name: "orangemug",
@@ -25,7 +25,9 @@ genTest(__dirname, templateDef, resultDef, function(tmpl, results) {
 			assert.equal(out.args[0], "orangemug");
 			assert.equal(out.sql, results["./out.sql"]);
 		});
+	});
 
+	genTest(__dirname, ["./in.sql"], resultDef, function(tmpl, results) {
 		it("should throw error on missing template", function() {
 			var thrownErr;
 

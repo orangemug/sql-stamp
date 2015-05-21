@@ -1,28 +1,29 @@
-var assert = require("assert");
-var fetchData = require("../util/fetch-data");
-var sqlStamp = require("../../");
+var assert  = require("assert");
+var genTest = require("../util/gen-test");
 
-var data = fetchData({
-  example: "/example.sql",
-  friends: "/friends.sql",
-  result:  "/result.sql"
-}, __dirname);
+var templatesObj = [
+  "./example.sql",
+  "./friends.sql",
+];
 
+var resultsObj = [
+  "./out.sql"
+];
 
-describe("end-to-end", function() {
-  it("should work", function() {
-    var out = sqlStamp(data.example, {
-      accountId: 1,
-      filterDisabled: false,
-      filterKey: "role",
-      filterVal: "dev"
-    }, {
-      "./friends.sql": data.friends
-    });
+genTest(__dirname, templatesObj, resultsObj, function(tmpl, results) {
+	describe("end-to-end", function() {
+		it("should work", function() {
+			var out = tmpl("./example.sql", {
+				accountId: 1,
+				filterDisabled: false,
+				filterKey: "role",
+				filterVal: "dev"
+			});
 
-    assert.equal(out.args.length, 2);
-    assert.equal(out.args[0], 1);
-    assert.equal(out.args[1], "dev");
-    assert.equal(out.sql, data.result);
-  });
+			assert.equal(out.args.length, 2);
+			assert.equal(out.args[0], 1);
+			assert.equal(out.args[1], "dev");
+			assert.equal(out.sql, results["./out.sql"]);
+		});
+	});
 });
