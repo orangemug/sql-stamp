@@ -1,4 +1,4 @@
-var util = require("./lib/util");
+var util      = require("./lib/util");
 var operators = require("./lib/operators");
 
 
@@ -17,39 +17,38 @@ function sqlStamp(sqlTemplate, data, _templates) {
   var ctx = {
     self: sqlStamp,
     templates: templates,
-    data: data
+    data: data,
+    args: []
   };
 
-  var sql = sqlTemplate.replace(/{([>?!]?)([^}]+)}/g, function() {
-    // Check for operator
-    var type   = RegExp.$1;
-    var operatorArgs = RegExp.$2.split(",")
+  var out = sqlTemplate.replace(/([^}]*)(?:\{([>?!]?)([^}]*)\})([^{]*)/g, function(match, pre, type, args, post, offset) {
+    var operatorArgs = args.split(",")
       .map(util.chomp)
       .map(util.removeQuotes);
 
-    var fnArgs = [ctx].concat(operatorArgs);
-    var operator = operators[type];
+    pre  = util.escapeString(pre);
+    post = util.escapeString(post);
 
-    if(operator) {
-      operator.check.apply(null, fnArgs);
-
-      var out = operator.fn.apply(null, fnArgs);
-      if(out.args) {
-        if(Array.isArray(out.args)) {
-          args.push.apply(args, out.args);
-        } else {
-          args.push(out.args);
-        }
-      }
-      return out.text;
+    var out;
+    if(offset > 0) {
+      out = "+";    
     } else {
-      throw "Invalid operator";
+      out = "return ";
     }
-  });
+    out += "\""+pre+"\"";
+    
+    out += "+operators[\""+type+"\"](ctx, "+operatorArgs.map(util.addQuotes).join(",")+")";
+    out += "+\""+post+"\"";
+    return out;
+  })
+
+  var fn = new Function("operators", "ctx", "data", out);
+  var boundFn = fn.bind(null, operators, ctx);
+  var ret = boundFn();
 
   return {
-    sql: sql,
-    args: args
+    sql: ret,
+    args: ctx.args
   };
 }
 
