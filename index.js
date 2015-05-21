@@ -2,26 +2,8 @@ var util      = require("./lib/util");
 var operators = require("./lib/operators");
 
 
-function sqlStamp(sqlTemplate, data, _templates) {
-  var args = [];
-  var templates = {};
-  data = data || {};
-
-  // Clean our templates
-  if(_templates) {
-    Object.keys(_templates).forEach(function(key) {
-      templates[key] = util.chomp(_templates[key]);
-    });
-  }
-
-  var ctx = {
-    self: sqlStamp,
-    templates: templates,
-    data: data,
-    args: []
-  };
-
-  var out = sqlTemplate.replace(/([^}]*)(?:\{([>?!]?)([^}]*)\})([^{]*)/g, function(match, pre, type, args, post, offset) {
+function genTemplateFn(sqlRaw, templates) {
+  var out = sqlRaw.replace(/([^}]*)(?:\{([>?!]?)([^}]*)\})([^{]*)/g, function(match, pre, type, args, post, offset) {
     var operatorArgs = args.split(",")
       .map(util.chomp)
       .map(util.removeQuotes);
@@ -43,13 +25,34 @@ function sqlStamp(sqlTemplate, data, _templates) {
   })
 
   var fn = new Function("operators", "ctx", "data", out);
-  var boundFn = fn.bind(null, operators, ctx);
-  var ret = boundFn();
-
-  return {
-    sql: ret,
-    args: ctx.args
-  };
+  return fn.bind(null, operators);
 }
+
+function sqlStamp(_templates) {
+  var templates = {};
+  for(key in _templates) {
+    var template = _templates[key];
+    var fn = genTemplateFn(template);
+    templates[util.chomp(key)] = fn;
+  }
+
+  return function hdl(key, data) {
+    key = util.chomp(key);
+    data = data || {};
+
+    var ctx = {
+      self: hdl,
+      templates: templates,
+      data: data,
+      args: []
+    };
+
+    return {
+      sql: templates[key](ctx),
+      args: ctx.args
+    };
+  }
+}
+
 
 module.exports = sqlStamp;
