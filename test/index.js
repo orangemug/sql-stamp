@@ -6,7 +6,7 @@ require("./operators/raw");
 require("./operators/require");
 
 // Full end-to-end test
-require("./end-to-end");
+require("./functional");
 
 // Experimental advanced error support
 require("./errors");
