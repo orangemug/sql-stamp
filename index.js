@@ -25,28 +25,38 @@ function runner(template, ctx) {
     .join("");
 }
 
+function parsePart(parts, m) {
+  var pre  = m[1];
+  var type = m[2];
+  var args = m[3];
+  var post = m[4];
+
+  var operator = operators[type];
+  var operatorArgs = args.split(",")
+    .map(util.chomp)
+    .map(util.removeQuotes);
+
+  parts.push({sql: pre});
+
+  parts.push({
+    sql: "{}",
+    fn: function(ctx) {
+      return operator.apply(null, [ctx].concat(operatorArgs));
+    }
+  });
+
+  parts.push({sql: post});
+}
+
 function genTemplateFn(sqlRaw, templates) {
-  var parts = [];
-  var out = sqlRaw.replace(/([^}]*)(?:\{([>?!]?)([^}]*)\})([^{]*)/g, function(match, pre, type, args, post, offset) {
-    var operatorArgs = args.split(",")
-      .map(util.chomp)
-      .map(util.removeQuotes);
+  var m, parts = [];
+  var re = /([^}]*)(?:\{([>?!]?)([^}]*)\})([^{]*)/g;
 
-    parts.push({sql: pre});
+  while(m = re.exec(sqlRaw)) {
+    parsePart(parts, m);
+  }
 
-    parts.push({
-      sql: "{}",
-      fn: function(ctx) {
-        return operators[type](ctx, operatorArgs);
-      }
-    });
-
-    parts.push({sql: post});
-  })
-
-  var fnBody = getBody(runner)
-  var fn = new Function(fnBody.args, fnBody.body).bind(null, parts);
-  return fn;
+  return runner.bind(null, parts);
 }
 
 function sqlStamp(_templates) {
