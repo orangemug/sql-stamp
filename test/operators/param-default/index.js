@@ -1,5 +1,5 @@
 var assert  = require("assert");
-var genTest = require("../util/gen-test");
+var genTest = require("../../util/gen-test");
 
 var opts = {
 	sqlFiles: ["./in.sql"],
