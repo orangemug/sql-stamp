@@ -41,7 +41,7 @@ function parsePart(parts, m) {
   parts.push({
     sql: "{}",
     fn: function(ctx) {
-      return operator.apply(null, [ctx].concat(operatorArgs));
+      return operator.apply(ctx, operatorArgs);
     }
   });
 
