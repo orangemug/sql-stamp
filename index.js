@@ -1,72 +1,22 @@
-var util      = require("./lib/util");
-var operators = require("./lib/operators");
+var lodash = require("lodash");
+var util   = require("./lib/util");
+var parser = require("./lib/parser");
 
+/**
+ *
+ */
+module.exports = function(_templates, opts) {
+  opts = lodash.assign({
+    prettyErrors: false
+  }, opts);
 
-function getBody(fn) {
-  var regex = /^function[ ]*[^(]*\(([^)]*)\)[ ]*{((?:[\n\r]|.)*)}$/;
-  var matches = fn.toString().match(regex);
-
-  return {
-    args: matches[1].split(",").map(util.chomp),
-    body: matches[2]
-  }
-}
-
-
-function runner(template, ctx) {
-  return template
-    .map(function(part, idx) {
-      if(part.fn) {
-        return part.fn(ctx);
-      } else {
-        return part.sql;
-      }
-    })
-    .join("");
-}
-
-function parsePart(parts, m) {
-  var pre  = m[1];
-  var type = m[2];
-  var args = m[3];
-  var post = m[4];
-
-  var operator = operators[type];
-  var operatorArgs = args.split(",")
-    .map(util.chomp)
-    .map(util.removeQuotes);
-
-  parts.push({sql: pre});
-
-  parts.push({
-    sql: "{}",
-    fn: function(ctx) {
-      return operator.apply(ctx, operatorArgs);
-    }
-  });
-
-  parts.push({sql: post});
-}
-
-function genTemplateFn(sqlRaw, templates) {
-  var m, parts = [];
-  var re = /([^}]*)(?:\{([>?!]?)([^}]*)\})([^{]*)/g;
-
-  while(m = re.exec(sqlRaw)) {
-    parsePart(parts, m);
-  }
-
-  return runner.bind(null, parts);
-}
-
-function sqlStamp(_templates) {
+	// Generate the templates
   var templates = {};
   for(key in _templates) {
-    var template = _templates[key];
-    var fn = genTemplateFn(util.chomp(template));
-    templates[util.chomp(key)] = fn;
+    templates[util.chomp(key)] = parser(_templates[key], opts);
   }
 
+	// Return a template runner
   return function hdl(key, data) {
     key  = util.chomp(key);
     data = data || {};
@@ -84,6 +34,3 @@ function sqlStamp(_templates) {
     };
   }
 }
-
-
-module.exports = sqlStamp;

@@ -1,7 +1,12 @@
 var assert  = require("assert");
 var genTest = require("../util/gen-test");
 
-genTest(__dirname, ["./in.sql"], ["./out.falsey.sql", "./out.truthy.sql"], function(tmpl, results) {
+var opts = {
+	sqlFiles: ["./in.sql"],
+	resultFiles: ["./out.falsey.sql", "./out.truthy.sql"]
+}
+
+genTest(__dirname, opts, function(tmpl, results) {
 	describe("feature-default", function() {
 		it("should enable on truthy", function() {
 			var out = tmpl("./in.sql", {

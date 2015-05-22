@@ -1,7 +1,12 @@
 var assert  = require("assert");
 var genTest = require("../util/gen-test");
 
-genTest(__dirname, ["./in.sql"], ["./out.sql"], function(tmpl, results) {
+var opts = {
+	sqlFiles: ["./in.sql"],
+	resultFiles: ["./out.sql"]
+}
+
+genTest(__dirname, opts, function(tmpl, results) {
 	describe("param-default", function() {
 
 		it("should work", function() {
@@ -39,7 +44,7 @@ genTest(__dirname, ["./in.sql"], ["./out.sql"], function(tmpl, results) {
 			}
 
 			assert(thrownErr);
-			assert.equal(thrownErr, "Missing key 'name'");
+			assert.equal(thrownErr.message, "Missing key 'name'");
 		});
 	});
 });

@@ -1,7 +1,12 @@
 var assert  = require("assert");
 var genTest = require("../util/gen-test");
 
-genTest(__dirname, ["./in.sql"], ["./out.sql"], function(tmpl, results) {
+var opts = {
+	sqlFiles: ["./in.sql"],
+	resultFiles: ["./out.sql"]
+}
+
+genTest(__dirname, opts, function(tmpl, results) {
 	describe("raw", function() {
 		it("should work", function() {
 			var out = tmpl("./in.sql", {

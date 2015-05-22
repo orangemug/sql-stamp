@@ -1,0 +1,10 @@
+SQLError: Missing key
+
+select
+  *
+from
+  account
+where
+      name = {name}
+-------------^
+  AND role = "dev"

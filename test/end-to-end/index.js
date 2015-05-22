@@ -1,16 +1,17 @@
 var assert  = require("assert");
 var genTest = require("../util/gen-test");
 
-var templatesObj = [
-  "./example.sql",
-  "./friends.sql",
-];
+var opts = {
+	sqlFiles: [
+		"./example.sql",
+		"./friends.sql",
+	],
+	resultFiles: [
+		"./out.sql"
+	]
+}
 
-var resultsObj = [
-  "./out.sql"
-];
-
-genTest(__dirname, templatesObj, resultsObj, function(tmpl, results) {
+genTest(__dirname, opts, function(tmpl, results) {
 	describe("end-to-end", function() {
 		it("should work", function() {
 			var out = tmpl("./example.sql", {
