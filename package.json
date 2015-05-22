@@ -6,7 +6,9 @@
   },
   "scripts": {
     "test": "mocha test/index.js",
-    "coveralls": "NODE_ENV=test ./node_modules/.bin/mocha -r blanket --reporter mocha-lcov-reporter test/index.js | ./node_modules/coveralls/bin/coveralls.js"
+    "coverage": "mocha test/index.js -r blanket -R mocha-term-cov-reporter",
+    "coverage-ci": "mocha test/index.js -r blanket -R mocha-lcov-reporter",
+    "benchmark": "node test/benchmark/index.js"
   },
   "config": {
     "blanket": {
@@ -26,6 +28,7 @@
     "coveralls": "^2.11.2",
     "lodash": "^3.9.1",
     "mocha": "^2.2.4",
-    "mocha-lcov-reporter": "0.0.2"
+    "mocha-lcov-reporter": "0.0.2",
+    "mocha-term-cov-reporter": "^0.2.0"
   }
 }
