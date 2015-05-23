@@ -1,9 +1,6 @@
 {
   "name": "sql-stamp",
   "version": "0.6.1",
-  "bin": {
-    "sql-stamp": "./bin/cli.js"
-  },
   "scripts": {
     "test": "mocha test/index.js",
     "coverage": "mocha test/index.js -r blanket -R mocha-term-cov-reporter",
