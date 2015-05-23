@@ -1,16 +1,16 @@
 # sql-stamp
 [![Build Status](https://travis-ci.org/orangemug/sql-stamp.svg?branch=master)](https://travis-ci.org/orangemug/sql-stamp)
-[![Coverage Status](https://coveralls.io/repos/orangemug/sql-stamp/badge.svg)](https://coveralls.io/r/orangemug/sql-stamp)
+[![Test Coverage](https://codeclimate.com/github/orangemug/sql-stamp/badges/coverage.svg)](https://codeclimate.com/github/orangemug/sql-stamp/coverage)
 [![Code Climate](https://codeclimate.com/github/orangemug/sql-stamp/badges/gpa.svg)](https://codeclimate.com/github/orangemug/sql-stamp)
 
-The tiny SQL templater, with the aim to be as simple as possible as to not get in the way of you writing SQL.
+The tiny SQL templater, with the aim to be as simple as possible so to not get in the way of you writing SQL.
 
 It supports the following conditionals:
 
- * `{key, default}`  - Turns into `?` with the correct ordering in the returned args (so safe for user input)
- * `{!key, default}` - Passed raw into the SQL
- * `{>path, optionalDataObject}` - Require file from the templates hash
- * `{?key, replaceA, replaceB}` - Feature switch
+ * `{key, optionalDefault}`  - Turns args into `?` with an optional default
+ * `{!key, optionalDefault}` - Passed raw into the SQL
+ * `{>path, optionalDataKey}` - Require file from the templates
+ * `{?key, replaceTruthy, replaceFalsey}` - Ternary switch, the defaults are replaceTruthy/replaceFalsey === true/false
 
 
 ## Install
@@ -19,17 +19,21 @@ It supports the following conditionals:
 
 
 ## API
-The basic API is as follows
+The API is as follows
 
     var sqlStamp = require("sql-stamp");
-    sqlStamp(sqlString, dataObj, templateObj);
+    var tmpl = sqlStamp({
+      /* Pass a list of templates... (key=path, value=sql-string) */
+      "./friends.sql": "SQL_STRING",
+      "./example.sql": "SQL_STRING"
+    });
 
-So for example given the following file which selects all friends with a `userId`
+So for example given the following SQL file which selects all friend requests you've accepted
 
     /* ./friends.sql */
-    select * from friends where fromId = {userId}
+    select * from friends where status = "accepted"
 
-And the following uses this as a CTE (<http://www.postgresql.org/docs/9.1/static/queries-with.html>) via a "require"
+The following file can **require** this as a CTE (<http://www.postgresql.org/docs/9.1/static/queries-with.html>) via a require directive `{> ./file/path.sql}`
 
     /* ./example.sql */
     WITH friend AS (
@@ -38,23 +42,21 @@ And the following uses this as a CTE (<http://www.postgresql.org/docs/9.1/static
     select
       *
     from
-      user
+      account
     where
-      user.id = friend.toId
-      AND user.status = "active"
+      account.id = friend.toId
+      AND friend.fromId = {accountId}
       AND (
         {?filterDisabled} OR {!filterKey} = {filterVal}
       )
 
 When we run the following
 
-    var out = sqlStamp(/* example.sql as string */, {
-      userId: 1,
+    var out = tmpl("./example.sql", {
+      accountId: 1,
       filterDisabled: false,
       filterKey: "role",
       filterVal: "dev"
-    }, {
-      "./friends.sql": /* friends.sql as string */
     });
 
 The following will be returned
@@ -64,15 +66,15 @@ The following will be returned
       sql: /* SQL in comment below */
       /**
        * WITH friend AS (
-       *   select * from friends where fromId = ?
+       *   select * from friends where status = "active"
        * )
        * select
        *   *
        * from
-       *   user
+       *   account
        * where
-       *   user.id = friend.toId
-       *   AND user.status = "active"
+       *   account.id = friend.toId
+       *   AND friend.fromId = ?
        *   AND (
        *     /*feature:filterDisabled*/ false AND role = ?
        *   )
@@ -80,16 +82,24 @@ The following will be returned
     }
 
 
-## CLI
-You also have a CLI available to you to render templates from the command line
+## Pretty errors
+There is also experimental support for more descriptive errors and can be enabled with `{prettyErrors: true}`
 
-    $ sql-stamp ./test/require/in.sql --name orangemug
-    {
-      "sql": "WITH some_cte AS (select * from account where name = ?)\nselect * from some_cte\n",
-      "args": [
-        "orangemug"
-      ]
-    }
+    var tmpl = sqlStamp(templates, {prettyErrors: true});
+
+Then you'll get more descriptive errors about where the error happened in your source SQL
+
+    SQLError: Too many args
+
+    select
+      *
+    from
+      account
+    where
+      foo = {too, many, args}
+    --------^
+
+You can see some more examples in the tests here <test/errors/index.js>
 
 
 ## Test

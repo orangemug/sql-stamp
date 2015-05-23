@@ -1,0 +1,9 @@
+SQLError: Too few args
+
+select
+  *
+from
+  account
+where
+  foo = {}
+--------^

@@ -1,0 +1,6 @@
+SQLError: No such template './no-such-file.sql'
+
+WITH foo AS (
+  {>./no-such-file.sql}
+--^
+)

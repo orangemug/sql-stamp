@@ -1,7 +1,9 @@
 script:
-  - "npm test"
-
+- npm test
+- npm run coverage-ci
 language: node_js
-
 node_js:
-  - "0.10"
+- '0.10'
+env:
+  global:
+    secure: Rawhb3XgaB4W2+VpYw6il1EiC4cZjjS97I9ZYY6r/7KxTFZcXz6Ex8gbVCEoF2WHe/eFhXmxAUe2UZ/guAQx9JqF9nf8mrM3n2iNcuZdj9NScB+qyoGf0J+UmCtSipHRvC3pEnwnyvsCyBU7j5PykFPWDvj2plhCTf/PXPzHeKSOeGNkccrC6XW/k7+udMK5GJGXqsz6co5W2OgvjF3ZlXA4Z2Sx2YhTH1gZTXI2Q8SwKP+XfCUGPPRzn+IL5hWf/OL3D8no1GD8w6PsWUbruaAF+8CNnKqPm/qyxqTmTuIjLHw+vs3TG9+nEuu1PaaBXLRrk3EUFJEAOhTf0V9pNMF7OLBTPCum4mzyCD6i2N56A5c1zh4mlTgzw5nDpg91iIMUHL3REmYUqN1zvBFhXvKyA1LLm2OYFbbt6PD2KK0lMFj1G+RMXwtjfrVdp2wKvUeCOMbwF2/uFDdjzZ6kddMkjc/EO9mafyQCr4abAC/maMLYkOTfuVvsc9lgqDriPtnI9olI6+FieOfqXiFDSPaaNukUH7Abt9i934KgJyj/2FjJ+yAHEoIS6bYwWu9e5+pvXOmZhrj4dkJLsTS8dbypq6X5oGttOzekQRd4tEkXHK1PqAIFacly3ClmAPAKCOaZbtrB90IDzYpybEACttc71egE+dACSRbPIYbWqKw=
