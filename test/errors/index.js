@@ -44,7 +44,8 @@ describe("pretty-errors", function() {
     var results = fetchTemplates(["./errs/no-such-template.txt"], __dirname);
 
     try {
-      sqlStamp(files, opts);
+      var tmpl = sqlStamp(files, opts);
+      tmpl("./sql/no-such-template.sql", {});
     } catch(err) {
       thrownErr = err;
     }

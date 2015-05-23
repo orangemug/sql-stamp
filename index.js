@@ -1,4 +1,3 @@
-var lodash = require("lodash");
 var util   = require("./lib/util");
 var parser = require("./lib/parser");
 
@@ -6,9 +5,8 @@ var parser = require("./lib/parser");
  *
  */
 module.exports = function(_templates, opts) {
-  opts = lodash.assign({
-    prettyErrors: false
-  }, opts);
+  opts = opts || {};
+  opts.prettyErrors = opts.prettyErrors || false;
 
 	// Generate the templates
   var templates = {};

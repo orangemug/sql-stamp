@@ -43,7 +43,7 @@ describe("require", function() {
 			}
 
 			assert(thrownErr);
-			assert.equal(thrownErr, "No such template './in_sub.sql'");
+			assert.equal(thrownErr.message, "No such template './in_sub.sql'");
 		});
 	});
 });

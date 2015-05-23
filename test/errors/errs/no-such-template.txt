@@ -2,3 +2,5 @@ SQLError: No such template
 
 WITH foo AS (
   {>./no-such-file.sql}
+--^
+)

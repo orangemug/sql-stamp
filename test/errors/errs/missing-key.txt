@@ -1,4 +1,4 @@
-SQLError: Missing key
+SQLError: Missing key 'name'
 
 select
   *
