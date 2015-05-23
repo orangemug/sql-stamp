@@ -1,7 +1,7 @@
 {
   "name": "sql-stamp",
   "description": "The tiny SQL templater",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "scripts": {
     "test": "mocha test/index.js",
     "coverage": "mocha test/index.js -r blanket -R mocha-term-cov-reporter",
