@@ -7,7 +7,7 @@
   "scripts": {
     "test": "mocha test/index.js",
     "coverage": "mocha test/index.js -r blanket -R mocha-term-cov-reporter",
-    "coverage-ci": "mocha test/index.js -r blanket -R mocha-lcov-reporter",
+    "coverage-ci": "mocha test/index.js -r blanket -R mocha-lcov-reporter > lcov.info && codeclimate < lcov.info",
     "benchmark": "node test/benchmark/index.js"
   },
   "config": {
@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "blanket": "^1.1.7",
+    "codeclimate-test-reporter": "0.0.4",
     "coveralls": "^2.11.2",
     "lodash": "^3.9.1",
     "mocha": "^2.2.4",
