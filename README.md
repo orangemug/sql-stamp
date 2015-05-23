@@ -15,7 +15,7 @@ It supports the following conditionals:
 
 ## Install
 
-    npm i git://github.com/orangemug/sql-stamp.git --save
+    npm i sql-stamp --save
 
 
 ## API
