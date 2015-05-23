@@ -28,7 +28,7 @@ The API is as follows
       "./example.sql": "SQL_STRING"
     });
 
-So for example given the following SQL file which selects all friend requets you've accepted
+So for example given the following SQL file which selects all friend requests you've accepted
 
     /* ./friends.sql */
     select * from friends where status = "accepted"
