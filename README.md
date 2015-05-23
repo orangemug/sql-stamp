@@ -99,7 +99,7 @@ Then you'll get more descriptive errors about where the error happened in your s
       foo = {too, many, args}
     --------^
 
-You can see some more examples in the tests here <test/errors/index.js>
+You can see some more examples in the tests here [here](test/errors/index.js)
 
 
 ## Test
@@ -108,4 +108,4 @@ You can see some more examples in the tests here <test/errors/index.js>
 
 
 ## License
-MIT
+[MIT](LICENSE)
