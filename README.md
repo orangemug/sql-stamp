@@ -4,6 +4,9 @@ The tiny SQL templater, with the aim to be as simple as possible so to not get i
 [![Build Status](https://travis-ci.org/orangemug/sql-stamp.svg?branch=master)](https://travis-ci.org/orangemug/sql-stamp) 
 [![Test Coverage](https://codeclimate.com/github/orangemug/sql-stamp/badges/coverage.svg)](https://codeclimate.com/github/orangemug/sql-stamp/coverage) 
 [![Code Climate](https://codeclimate.com/github/orangemug/sql-stamp/badges/gpa.svg)](https://codeclimate.com/github/orangemug/sql-stamp) 
+[![Dependency Status](https://david-dm.org/orangemug/sql-stamp.svg)](https://david-dm.org/orangemug/sql-stamp)
+[![Dev Dependency Status](https://david-dm.org/orangemug/sql-stamp/dev-status.svg)](https://david-dm.org/orangemug/sql-stamp#info=devDependencies)
+
 
 It supports the following conditionals:
 
