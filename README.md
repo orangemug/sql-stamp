@@ -82,6 +82,26 @@ The following will be returned
     }
 
 
+## Pretty errors
+There is also experimental support for more descriptive errors and can be enabled with `{prettyErrors: true}`
+
+    var tmpl = sqlStamp(templates, {prettyErrors: true});
+
+Then you'll get more descriptive errors about where the error happened in your source SQL
+
+    SQLError: Too many args
+
+    select
+      *
+    from
+      account
+    where
+      foo = {too, many, args}
+    --------^
+
+You can see some more examples in the tests here <test/errors/index.js>
+
+
 ## CLI
 You also have a CLI available to you to render templates from the command line
 
