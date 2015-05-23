@@ -7,6 +7,10 @@
     "coverage-ci": "mocha test/index.js -r blanket -R mocha-lcov-reporter > lcov.info && codeclimate < lcov.info",
     "benchmark": "node test/benchmark/index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/orangemug/sql-stamp.git"
+  },
   "config": {
     "blanket": {
       "pattern": [
