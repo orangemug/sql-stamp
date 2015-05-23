@@ -1,5 +1,6 @@
 {
   "name": "sql-stamp",
+  "description": "The tiny SQL templater",
   "version": "0.6.2",
   "scripts": {
     "test": "mocha test/index.js",
@@ -19,6 +20,10 @@
       "data-cover-never": "node_modules"
     }
   },
+  "keywords": [
+    "template",
+    "sql"
+  ],
   "licenses": [
     {
       "type": "MIT",
