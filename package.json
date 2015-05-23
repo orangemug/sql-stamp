@@ -18,11 +18,6 @@
       "data-cover-never": "node_modules"
     }
   },
-  "dependencies": {
-    "bluebird": "^2.9.25",
-    "glob": "^5.0.6",
-    "yargs": "^3.9.0"
-  },
   "devDependencies": {
     "blanket": "^1.1.7",
     "codeclimate-test-reporter": "0.0.4",
