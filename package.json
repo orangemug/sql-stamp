@@ -19,6 +19,12 @@
       "data-cover-never": "node_modules"
     }
   },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://opensource.org/licenses/MIT"
+    }
+  ],
   "devDependencies": {
     "blanket": "^1.1.7",
     "codeclimate-test-reporter": "0.0.4",
