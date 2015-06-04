@@ -31,6 +31,10 @@ The API is as follows
       "./example.sql": "SQL_STRING"
     });
 
+    var sql = sqlStamp("./sql/**/*.sql", callback); // => Promise
+    sql(__dirname+"../lib/sql/foo.sql", {foo: "bar"}); // => Promise
+    sql("./lib/sql/foo.sql", {foo: "bar"}, callback); // => Promise
+
 So for example given the following SQL file which selects all friend requests you've accepted
 
     /* ./friends.sql */
@@ -108,6 +112,10 @@ You can see some more examples in the tests here [here](test/errors/index.js)
 ## Test
 
     npm test
+
+
+## Thanks
+Thanks to [Pearlshare](http://www.pearlshare.com) for supporting dev and [Oliver Brooks](https://github.com/oliverbrooks/) for help with design.
 
 
 ## License
