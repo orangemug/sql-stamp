@@ -38,5 +38,8 @@
     "mocha": "^2.2.4",
     "mocha-lcov-reporter": "0.0.2",
     "mocha-term-cov-reporter": "^0.2.0"
+  },
+  "dependencies": {
+    "bluebird": "^2.9.27"
   }
 }
