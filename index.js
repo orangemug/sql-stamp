@@ -1,5 +1,4 @@
 var fs       = require("fs");
-var glob     = require("glob");
 var path     = require("path");
 var Bluebird = require("bluebird");
 var util     = require("./lib/util");
