@@ -5,7 +5,11 @@ var util     = require("./lib/util");
 var parser   = require("./lib/parser");
 
 /**
- *
+ * Initialize a SQL templater
+ * @param {Array} _templates
+ * @param {Object} [opts]
+ * @param {Function} [callback]
+ * @return {Promise}
  */
 module.exports = function(_templates, opts, callback) {
   opts = opts || {};
