@@ -33,9 +33,11 @@ The API is as follows
       // 'sql' call with 'sql(pathToFile, args)' to exec the template
     });
 
-    var sql = sqlStamp("./sql/**/*.sql", {prettyErrors: false}); // => Promise
-    sql(__dirname+"../lib/sql/foo.sql", {foo: "bar"}); // => String
-    sql("./lib/sql/foo.sql", {foo: "bar"}, callback); // => String
+    var files = glob.sync("./sql/**/*.sql")
+    sqlStamp(files).then(function(sql) {
+      sql(__dirname+"../lib/sql/foo.sql", {foo: "bar"});
+      // => {sql: "select...", args: ["bar"]}
+    });
 
 So for example given the following SQL file which selects all friend requests you've accepted
 
@@ -91,12 +93,8 @@ The following will be returned
     }
 
 
-## Pretty errors
-There is also experimental support for more descriptive errors and can be enabled with `{prettyErrors: true}`
-
-    sqlStamp(templates, {prettyErrors: true}); // => Promise
-
-Then you'll get more descriptive errors about where the error happened in your source SQL
+## Errors
+You'll get more descriptive errors about where the error happened in your source SQL. This can be disabled with `{prettyErrors: false}`
 
     SQLError: Too many args
 
@@ -112,8 +110,17 @@ You can see some more examples in the tests here [here](test/errors/index.js)
 
 
 ## Test
+Run the unit tests
 
     npm test
+
+Unit tests with code coverage
+
+    npm run coverage
+
+And some really simple benchmarks
+
+    npm run benchmark
 
 
 ## Thanks
