@@ -25,15 +25,17 @@ It supports the following conditionals:
 The API is as follows
 
     var sqlStamp = require("sql-stamp");
-    var tmpl = sqlStamp({
-      /* Pass a list of templates... (key=path, value=sql-string) */
-      "./friends.sql": "SQL_STRING",
-      "./example.sql": "SQL_STRING"
+    var tmpl = sqlStamp([
+      /* Pass a list of SQL templates */
+      __dirname+"/friends.sql",
+      __dirname+"/example.sql"
+    ]).then(function(sql) {
+      // 'sql' call with 'sql(pathToFile, args)' to exec the template
     });
 
-    var sql = sqlStamp("./sql/**/*.sql", callback); // => Promise
-    sql(__dirname+"../lib/sql/foo.sql", {foo: "bar"}); // => Promise
-    sql("./lib/sql/foo.sql", {foo: "bar"}, callback); // => Promise
+    var sql = sqlStamp("./sql/**/*.sql", {prettyErrors: false}); // => Promise
+    sql(__dirname+"../lib/sql/foo.sql", {foo: "bar"}); // => String
+    sql("./lib/sql/foo.sql", {foo: "bar"}, callback); // => String
 
 So for example given the following SQL file which selects all friend requests you've accepted
 
@@ -59,7 +61,7 @@ The following file can **require** this as a CTE (<http://www.postgresql.org/doc
 
 When we run the following
 
-    var out = tmpl("./example.sql", {
+    var out = tmpl(__dirname+"/example.sql", {
       accountId: 1,
       filterDisabled: false,
       filterKey: "role",
@@ -92,7 +94,7 @@ The following will be returned
 ## Pretty errors
 There is also experimental support for more descriptive errors and can be enabled with `{prettyErrors: true}`
 
-    var tmpl = sqlStamp(templates, {prettyErrors: true});
+    sqlStamp(templates, {prettyErrors: true}); // => Promise
 
 Then you'll get more descriptive errors about where the error happened in your source SQL
 
