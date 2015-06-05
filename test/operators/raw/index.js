@@ -1,33 +1,41 @@
-var assert  = require("assert");
-var genTest = require("../../util/gen-test");
+var assert     = require("assert");
+var sqlStamp   = require("../../../");
+var util       = require("../../util");
 
-var opts = {
-	sqlFiles: ["./in.sql"],
-	resultFiles: ["./out.sql"]
-}
+var results = util.readSync([
+	"./out.sql"
+], __dirname);
 
-genTest(__dirname, opts, function(tmpl, results) {
-	describe("raw", function() {
-		it("should work", function() {
-			var out = tmpl("./in.sql", {
-				filter: "foo"
+
+describe("raw", function() {
+	var tmpl;
+
+	before(function() {
+		return sqlStamp([__dirname+"/in.sql"], {})
+	 		.then(function(_tmpl) {
+				tmpl = _tmpl;
 			});
+	});
 
-			assert.equal(out.args.length, 0);
-			assert.equal(out.sql, results["./out.sql"]);
+	it("should work", function() {
+		var out = tmpl(__dirname+"/in.sql", {
+			filter: "foo"
 		});
 
-		it("should throw error on missing key", function() {
-			var thrownErr;
+		assert.equal(out.args.length, 0);
+		assert.equal(out.sql, results["./out.sql"]);
+	});
 
-			try {
-				tmpl("./in.sql", {});
-			} catch(err) {
-				thrownErr = err;
-			}
+	it("should throw error on missing key", function() {
+		var thrownErr;
 
-			assert(thrownErr);
-			assert.equal(thrownErr, "Missing key 'filter'");
-		});
+		try {
+			tmpl(__dirname+"/in.sql", {});
+		} catch(err) {
+			thrownErr = err;
+		}
+
+		assert(thrownErr);
+		assert.equal(thrownErr, "Missing key 'filter'");
 	});
 });

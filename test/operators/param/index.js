@@ -1,43 +1,46 @@
-var assert  = require("assert");
-var genTest = require("../../util/gen-test");
+var assert     = require("assert");
+var sqlStamp   = require("../../../");
+var util       = require("../../util");
 
-var opts = {
-  sqlFiles: ["./in.sql"],
-  resultFiles: ["./out.sql"],
-}
+var results = util.readSync([
+	"./out.sql"
+], __dirname);
 
-genTest(__dirname, opts, function(tmpl, results) {
-  describe("param", function() {
 
-    it("should work", function() {
+describe("param", function() {
+	var tmpl;
 
-      var out = tmpl("./in.sql", {
-        name: "orangemug",
-        role: "dev"
-      });
+	before(function() {
+		return sqlStamp([__dirname+"/in.sql"], {})
+			.then(function(_tmpl) {
+				tmpl = _tmpl;
+			});
+	});
 
-      assert.equal(out.args.length, 3);
-      assert.equal(out.args[0], "orangemug");
-      assert.equal(out.args[1], "dev");
-      assert.equal(out.args[2], "orangemug");
-      assert.equal(out.sql, results["./out.sql"]);
-    });
+	it("should work", function() {
 
-    it("should throw error on missing key", function() {
-      var thrownErr;
+		var out = tmpl(__dirname+"/in.sql", {
+			name: "orangemug",
+			role: "dev"
+		});
 
-      try {
-        tmpl("./in.sql", {});
-      } catch(err) {
-        thrownErr = err;
-      }
+		assert.equal(out.args.length, 3);
+		assert.equal(out.args[0], "orangemug");
+		assert.equal(out.args[1], "dev");
+		assert.equal(out.args[2], "orangemug");
+		assert.equal(out.sql, results["./out.sql"]);
+	});
 
-      assert(thrownErr);
-      assert.equal(thrownErr.message, "Missing key 'name'");
-    });
-  });
+	it("should throw error on missing key", function() {
+		var thrownErr;
+
+		try {
+			tmpl(__dirname+"/in.sql", {});
+		} catch(err) {
+			thrownErr = err;
+		}
+
+		assert(thrownErr);
+		assert.equal(thrownErr.message, "Missing key 'name'");
+	});
 });
-
-
-
-

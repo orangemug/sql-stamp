@@ -1,49 +1,53 @@
-var assert  = require("assert");
-var genTest = require("../../util/gen-test");
+var assert     = require("assert");
+var Bluebird   = require("bluebird");
+var sqlStamp   = require("../../../");
+var util       = require("../../util");
 
-var opts1 = {
-	sqlFiles: [
-		"./in.sql",
-		"./in_sub.sql",
-		"./in_sub_nested.sql",
-	],
-	resultFiles: [
-		"./out.sql"
-	]
-};
 
-var opts2 = {
-	sqlFiles: ["./in.sql"],
-}
+var results = util.readSync([
+	"./out.sql"
+], __dirname);
 
 describe("require", function() {
-	genTest(__dirname, opts1, function(tmpl, results) {
-		it("should work", function() {
-			var out = tmpl("./in.sql", {
-				name: "orangemug",
-				nested_var: {
-					foo: "bar"
-				}
+	var tmpl1, tmpl2;
+
+	before(function() {
+		var t1 = sqlStamp([__dirname+"/in.sql", __dirname+"/in_sub.sql", __dirname+"/in_sub_nested.sql"])
+	 		.then(function(_tmpl) {
+				tmpl1 = _tmpl;
 			});
 
-			assert.equal(out.args.length, 1);
-			assert.equal(out.args[0], "orangemug");
-			assert.equal(out.sql, results["./out.sql"]);
-		});
+		var t2 = sqlStamp([__dirname+"/in.sql"])
+	 		.then(function(_tmpl) {
+				tmpl2 = _tmpl;
+			});
+
+		return Bluebird.all([t1, t2]);
 	});
 
-	genTest(__dirname, opts2, function(tmpl, results) {
-		it("should throw error on missing template", function() {
-			var thrownErr;
-
-			try {
-				tmpl("./in.sql", {});
-			} catch(err) {
-				thrownErr = err;
+	it("should work", function() {
+		var out = tmpl1(__dirname+"/in.sql", {
+			name: "orangemug",
+			nested_var: {
+				foo: "bar"
 			}
-
-			assert(thrownErr);
-			assert.equal(thrownErr.message, "No such template './in_sub.sql'");
 		});
+
+		assert.equal(out.args.length, 1);
+		assert.equal(out.args[0], "orangemug");
+		assert.equal(out.sql, results["./out.sql"]);
+	});
+
+	it("should throw error on missing template", function() {
+		var thrownErr;
+
+		try {
+			tmpl2(__dirname+"/in.sql", {});
+		} catch(err) {
+			thrownErr = err;
+		}
+
+		assert(thrownErr);
+		assert.equal(thrownErr.message, "No such template './in_sub.sql'");
 	});
 });
