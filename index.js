@@ -13,10 +13,10 @@ module.exports = function(_templates, opts, callback) {
 
   var tasks = [];
 
-	// Generate the templates
+  // Generate the templates
   var templates = {};
   _templates.forEach(function(filepath) {
-		filepath = path.resolve(filepath);
+    filepath = path.resolve(filepath);
 
     tasks.push(new Bluebird(function(resolve, reject) {
       fs.readFile(filepath, function(err, data) {
