@@ -7,3 +7,4 @@ from
 where
   foo = {too, many, args}
 --------^
+  AND bar = "baz"

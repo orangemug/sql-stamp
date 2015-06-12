@@ -7,3 +7,4 @@ from
 where
   foo = {}
 --------^
+  AND bar = "baz"

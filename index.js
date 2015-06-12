@@ -6,20 +6,20 @@ var parser   = require("./lib/parser");
 
 /**
  * Initialize a SQL templater
- * @param {Array} _templates
+ * @param {Array} templates
  * @param {Object} [opts]
  * @param {Function} [callback]
  * @return {Promise}
  */
-module.exports = function(_templates, opts, callback) {
+module.exports = function(templates, opts, callback) {
   opts = opts || {};
   opts.prettyErrors = opts.prettyErrors || false;
 
   var tasks = [];
 
   // Generate the templates
-  var templates = {};
-  _templates.forEach(function(filepath) {
+  var parsedTemplates = {};
+  templates.forEach(function(filepath) {
     filepath = path.resolve(filepath);
 
     tasks.push(new Bluebird(function(resolve, reject) {
@@ -27,13 +27,14 @@ module.exports = function(_templates, opts, callback) {
         if(err) {
           reject(err);
         } else {
-          try {
-          templates[filepath] = parser(data.toString(), opts);
-          } catch(err) {
-            reject(err);
-            return;
-          }
-          resolve();
+          parser(data.toString(), opts)
+            .then(function(out) {
+              parsedTemplates[filepath] = out
+              resolve();
+            })
+            .catch(function(err) {
+              reject("SQLError: "+err);
+            });
         }
       });
     }));
@@ -50,13 +51,13 @@ module.exports = function(_templates, opts, callback) {
         var ctx = {
           path: key,
           self: hdl,
-          templates: templates,
+          templates: parsedTemplates,
           data: data,
           args: []
         };
 
         return {
-          sql: templates[key](ctx),
+          sql: parsedTemplates[key](ctx),
           args: ctx.args
         };
       }
