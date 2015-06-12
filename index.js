@@ -33,7 +33,7 @@ module.exports = function(templates, opts, callback) {
               resolve();
             })
             .catch(function(err) {
-              reject("SQLError: "+err);
+              reject(err);
             });
         }
       });
