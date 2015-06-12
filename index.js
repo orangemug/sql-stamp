@@ -11,7 +11,7 @@ var parser   = require("./lib/parser");
  * @param {Function} [callback]
  * @return {Promise}
  */
-module.exports = function(t, opts, callback) {
+module.exports = function(files, opts, callback) {
   opts = opts || {};
   opts.prettyErrors = opts.prettyErrors || false;
 
@@ -51,7 +51,7 @@ module.exports = function(t, opts, callback) {
         var ctx = {
           path: key,
           self: hdl,
-          files: parsedTemplates,
+          templates: parsedTemplates,
           data: data,
           args: []
         };
