@@ -6,12 +6,12 @@ var parser   = require("./lib/parser");
 
 /**
  * Initialize a SQL templater
- * @param {Array} templates
+ * @param {Array} files
  * @param {Object} [opts]
  * @param {Function} [callback]
  * @return {Promise}
  */
-module.exports = function(templates, opts, callback) {
+module.exports = function(t, opts, callback) {
   opts = opts || {};
   opts.prettyErrors = opts.prettyErrors || false;
 
@@ -19,7 +19,7 @@ module.exports = function(templates, opts, callback) {
 
   // Generate the templates
   var parsedTemplates = {};
-  templates.forEach(function(filepath) {
+  files.forEach(function(filepath) {
     filepath = path.resolve(filepath);
 
     tasks.push(new Bluebird(function(resolve, reject) {
@@ -51,7 +51,7 @@ module.exports = function(templates, opts, callback) {
         var ctx = {
           path: key,
           self: hdl,
-          templates: parsedTemplates,
+          files: parsedTemplates,
           data: data,
           args: []
         };
