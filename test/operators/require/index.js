@@ -12,7 +12,7 @@ describe("require", function() {
   var tmpl1, tmpl2;
 
   before(function() {
-    var t1 = sqlStamp([__dirname+"/in.sql", __dirname+"/in_sub.sql", __dirname+"/in_sub_nested.sql"])
+    var t1 = sqlStamp([__dirname+"/in.sql"])
       .then(function(_tmpl) {
         tmpl1 = _tmpl;
       });

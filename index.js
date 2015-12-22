@@ -1,10 +1,8 @@
-var fs       = require("fs");
+var lodash   = require("lodash");
 var path     = require("path");
 var Bluebird = require("bluebird");
 var util     = require("./lib/util");
 var parser   = require("./lib/parser");
-
-fs = Bluebird.promisifyAll(fs);
 
 /**
  * Initialize a SQL templater
@@ -14,42 +12,22 @@ fs = Bluebird.promisifyAll(fs);
  * @return {Promise}
  */
 module.exports = function(files, opts, callback) {
-  opts = opts || {};
-  opts.prettyErrors = opts.prettyErrors || false;
-
-  var tasks = [];
+  opts = lodash.assign({
+    prettyErrors: false
+  }, opts);
 
   // Generate the templates
-  var templatesToProcess = {};
+  var templates = {};
   files.forEach(function(filepath) {
     filepath = path.resolve(filepath);
-
-    templatesToProcess[filepath] = fs.readFileAsync(filepath)
-      .then(function(data) {
-        return parser(data.toString(), opts);
-      });
+    templates[filepath] = parser(filepath, templates, opts);
   });
 
   return Bluebird
-    .props(templatesToProcess)
+    .props(templates)
     .then(function(_templates) {
-      // Return a template runner
-      return function hdl(key, data) {
-        key  = path.resolve(util.chomp(key));
-        data = data || {};
-
-        var ctx = {
-          path: key,
-          self: hdl,
-          templates: _templates,
-          data: data,
-          args: []
-        };
-
-        return {
-          sql: _templates[key](ctx),
-          args: ctx.args
-        };
+      return function(key, data) {
+        return _templates[key](data);
       }
     })
     .nodeify(callback);
