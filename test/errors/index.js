@@ -1,6 +1,7 @@
 var assert   = require("assert");
 var sqlStamp = require("../../");
 var util     = require("./../util");
+var path     = require("path");
 
 var opts = {
   prettyErrors: true
@@ -30,17 +31,12 @@ describe("pretty-errors", function() {
 
   it("throw no-such-template", function(done) {
     var results = util.readSync(["./errs/no-such-template.txt"], __dirname);
+    var errStr = results["./errs/no-such-template.txt"]
+      .replace("%filepath%", path.resolve(__dirname+"/sql/no-such-file.sql"))
 
-    sqlStamp([__dirname+"/sql/no-such-template.sql"], opts, function(err, tmpl) {
-      var thrownErr;
-      try {
-        tmpl(__dirname+"/sql/no-such-template.sql", {});
-      } catch(err) {
-        thrownErr = err;
-      }
-
-      assert(thrownErr);
-      assert.equal(util.chomp(thrownErr.toString()), results["./errs/no-such-template.txt"]);
+    sqlStamp([__dirname+"/sql/no-such-template.sql"], opts, function(err) {
+      assert(err);
+      assert.equal(util.chomp(err.toString()), errStr);
       done();
     });
   });

@@ -2,6 +2,7 @@ var assert     = require("assert");
 var Bluebird   = require("bluebird");
 var sqlStamp   = require("../../../");
 var util       = require("../../util");
+var path       = require("path");
 
 
 var results = util.readSync([
@@ -42,12 +43,16 @@ describe("require", function() {
     var thrownErr;
 
     try {
-      tmpl2(__dirname+"/in.sql", {});
+      tmpl2(__dirname+"/in_missing.sql", {});
     } catch(err) {
       thrownErr = err;
     }
 
+    var errorPath = path.resolve(
+      path.join(__dirname, "in_missing.sql")
+    );
+
     assert(thrownErr);
-    assert.equal(thrownErr.message, "No such template './in_sub.sql'");
+    assert.equal(thrownErr.message, "No such template '"+errorPath+"'");
   });
 });

@@ -3,6 +3,7 @@ var path     = require("path");
 var Bluebird = require("bluebird");
 var util     = require("./lib/util");
 var parser   = require("./lib/parser");
+var errors   = require("./lib/errors");
 
 /**
  * Initialize a SQL templater
@@ -27,7 +28,11 @@ module.exports = function(files, opts, callback) {
     .props(templates)
     .then(function(_templates) {
       return function(key, data) {
-        return _templates[key](data);
+        if(_templates.hasOwnProperty(key)) {
+          return _templates[key](data);
+        } else {
+          throw new errors.NoSuchTemplate(key);
+        }
       }
     })
     .nodeify(callback);
