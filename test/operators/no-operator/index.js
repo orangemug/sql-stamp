@@ -17,7 +17,7 @@ describe("no-operator", function() {
       });
   });
 
-  it.only("should work", function() {
+  it("should work", function() {
     var out = tmpl(__dirname+"/in.sql", {});
     assert.equal(out.sql, results["./out.sql"]);
   });
