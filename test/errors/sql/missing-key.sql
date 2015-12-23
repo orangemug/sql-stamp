@@ -3,5 +3,5 @@ select
 from
   account
 where
-      name = {name}
+      name = {=name}
   AND role = "dev"

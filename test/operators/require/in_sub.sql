@@ -3,4 +3,4 @@ select
 from
   account
 where
-  name = {name}
+  name = {=name}
