@@ -28,7 +28,7 @@ module.exports = function(files, opts, callback) {
     .props(templates)
     .then(function(_templates) {
       return function(key, data) {
-        // key = path.normalize(key);
+        key = path.normalize(key);
 
         if(_templates.hasOwnProperty(key)) {
           return _templates[key](data);
