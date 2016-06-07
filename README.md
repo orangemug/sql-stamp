@@ -1,5 +1,5 @@
 # sql-stamp
-The tiny SQL templater, with the aim to be as simple as possible so to not get in the way of you writing SQL.
+The tiny SQL templating library, with the aim to be as simple as possible so to not get in the way of you writing SQL.
 
 [![Build Status](https://travis-ci.org/orangemug/sql-stamp.svg?branch=master)](https://travis-ci.org/orangemug/sql-stamp) 
 [![Test Coverage](https://codeclimate.com/github/orangemug/sql-stamp/badges/coverage.svg)](https://codeclimate.com/github/orangemug/sql-stamp/coverage) 
@@ -17,7 +17,7 @@ It supports the following conditionals:
 
 
 ## Why?
-I guess the best way to answer that is why not a HTML templating language like mustache? Basically these support loops and conditionals sql-stamp doesn't because I want the SQL to be kept clean and readable. It does however support a limitted ternary switch for feature switches. Also it'll add in `?` as params so you can use your SQL libraries injection protection.
+I guess the best way to answer that is why not a HTML templating language like mustache? Basically these support loops and conditionals sql-stamp doesn't because I want the SQL to be kept clean and readable. It does however support a limited ternary switch for feature switches. Also it'll add in `?` as params so you can use your SQL libraries injection protection.
 
 
 ## Install
@@ -128,7 +128,7 @@ And some really simple benchmarks
 
 
 ## Thanks
-Thanks to [Pearlshare](http://www.pearlshare.com) for supporting dev and [Oliver Brooks](https://github.com/oliverbrooks/) for help with design.
+Thanks to [Pearlshare](http://www.pearlshare.com) for supporting development and [Oliver Brooks](https://github.com/oliverbrooks/) for help with design.
 
 
 ## License
