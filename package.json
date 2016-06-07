@@ -31,15 +31,15 @@
     }
   ],
   "devDependencies": {
-    "blanket": "^1.1.7",
+    "blanket": "^1.2.3",
     "codeclimate-test-reporter": "^0.3.2",
-    "coveralls": "^2.11.2",
-    "mocha": "^2.2.4",
-    "mocha-lcov-reporter": "0.0.2",
+    "coveralls": "^2.11.9",
+    "mocha": "^2.5.3",
+    "mocha-lcov-reporter": "^1.2.0",
     "mocha-term-cov-reporter": "^0.2.3"
   },
   "dependencies": {
-    "bluebird": "^2.9.27",
+    "bluebird": "^3.4.0",
     "lodash.assign": "^4.0.9"
   }
 }
