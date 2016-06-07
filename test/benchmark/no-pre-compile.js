@@ -1,7 +1,7 @@
 var Benchmark = require("benchmark");
 var sqlStamp  = require("../../");
 
-var bench = new Benchmark('[sql-stamp] with-compile', {
+var bench = new Benchmark('[sql-stamp] no-pre-compile', {
   // a flag to indicate the benchmark is deferred
   'defer': true,
 

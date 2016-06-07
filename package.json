@@ -6,7 +6,7 @@
     "test": "mocha test/index.js",
     "coverage": "mocha test/index.js -r blanket -R mocha-term-cov-reporter",
     "coverage-ci": "mocha test/index.js -r blanket -R mocha-lcov-reporter > lcov.info && codeclimate < lcov.info",
-    "benchmark": "node test/benchmark/no-compile.js; node test/benchmark/with-compile.js"
+    "benchmark": "node test/benchmark/no-pre-compile.js; node test/benchmark/pre-compile.js"
   },
   "repository": {
     "type": "git",

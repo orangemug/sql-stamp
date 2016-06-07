@@ -6,7 +6,7 @@ sqlStamp([
   __dirname+"/../functional/friends.sql",
   __dirname+"/../functional/out.sql"
 ]).then(function(tmpl) {
-  var bench = new Benchmark('[sql-stamp] no-compile', {
+  var bench = new Benchmark('[sql-stamp] pre-compile', {
     // benchmark test function
     'fn': function() {
       // call resolve() when the deferred test is finished
