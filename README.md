@@ -10,7 +10,7 @@ The tiny SQL templater, with the aim to be as simple as possible so to not get i
 
 It supports the following conditionals:
 
- * `{key, optionalDefault}`  - Turns args into `?` with an optional default
+ * `{=key, optionalDefault}`  - Turns args into `?` with an optional default
  * `{!key, optionalDefault}` - Passed raw into the SQL
  * `{>path, optionalDataKey}` - Require file from the templates
  * `{?key, replaceTruthy, replaceFalsey}` - Ternary switch, the defaults are replaceTruthy/replaceFalsey === true/false
