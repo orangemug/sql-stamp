@@ -1,49 +1,71 @@
-var assert  = require("assert");
-var genTest = require("../../util/gen-test");
+var assert     = require("assert");
+var Bluebird   = require("bluebird");
+var sqlStamp   = require("../../../");
+var util       = require("../../util");
+var path       = require("path");
 
-var opts1 = {
-	sqlFiles: [
-		"./in.sql",
-		"./in_sub.sql",
-		"./in_sub_nested.sql",
-	],
-	resultFiles: [
-		"./out.sql"
-	]
-};
 
-var opts2 = {
-	sqlFiles: ["./in.sql"],
-}
+var results = util.readSync([
+  "./out.sql"
+], __dirname);
 
 describe("require", function() {
-	genTest(__dirname, opts1, function(tmpl, results) {
-		it("should work", function() {
-			var out = tmpl("./in.sql", {
-				name: "orangemug",
-				nested_var: {
-					foo: "bar"
-				}
-			});
+  var tmpl1, tmpl2;
 
-			assert.equal(out.args.length, 1);
-			assert.equal(out.args[0], "orangemug");
-			assert.equal(out.sql, results["./out.sql"]);
-		});
-	});
+  before(function() {
+    var t1 = sqlStamp([__dirname+"/in.sql"])
+      .then(function(_tmpl) {
+        tmpl1 = _tmpl;
+      });
 
-	genTest(__dirname, opts2, function(tmpl, results) {
-		it("should throw error on missing template", function() {
-			var thrownErr;
+    var t2 = sqlStamp([__dirname+"/in.sql"])
+      .then(function(_tmpl) {
+        tmpl2 = _tmpl;
+      });
 
-			try {
-				tmpl("./in.sql", {});
-			} catch(err) {
-				thrownErr = err;
-			}
+    return Bluebird.all([t1, t2]);
+  });
 
-			assert(thrownErr);
-			assert.equal(thrownErr.message, "No such template './in_sub.sql'");
-		});
-	});
+  it("should work", function() {
+    var out = tmpl1(__dirname+"/in.sql", {
+      name: "orangemug",
+      nested_var: {
+        foo: "bar"
+      }
+    });
+
+    assert.equal(out.args.length, 1);
+    assert.equal(out.args[0], "orangemug");
+    assert.equal(out.sql, results["./out.sql"]);
+  });
+
+  it("should allow complex paths", function() {
+    var out = tmpl1(__dirname+"/../../../test/operators/require/in.sql", {
+      name: "orangemug",
+      nested_var: {
+        foo: "bar"
+      }
+    });
+
+    assert.equal(out.args.length, 1);
+    assert.equal(out.args[0], "orangemug");
+    assert.equal(out.sql, results["./out.sql"]);
+  });
+
+  it("should throw error on missing template", function() {
+    var thrownErr;
+
+    try {
+      tmpl2(__dirname+"/in_missing.sql", {});
+    } catch(err) {
+      thrownErr = err;
+    }
+
+    var errorPath = path.resolve(
+      path.join(__dirname, "in_missing.sql")
+    );
+
+    assert(thrownErr);
+    assert.equal(thrownErr.message, "No such template '"+errorPath+"'");
+  });
 });

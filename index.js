@@ -1,34 +1,40 @@
-var util   = require("./lib/util");
-var parser = require("./lib/parser");
+var assign   = require("lodash.assign");
+var path     = require("path");
+var Bluebird = require("bluebird");
+var parser   = require("./lib/parser");
+var errors   = require("./lib/errors");
 
 /**
- *
+ * Initialize a SQL templater
+ * @param {Array} files
+ * @param {Object} [opts]
+ * @param {Function} [callback]
+ * @return {Promise}
  */
-module.exports = function(_templates, opts) {
-  opts = opts || {};
-  opts.prettyErrors = opts.prettyErrors || false;
+module.exports = function(files, opts, callback) {
+  opts = assign({
+    prettyErrors: false
+  }, opts);
 
-	// Generate the templates
+  // Generate the templates
   var templates = {};
-  for(key in _templates) {
-    templates[util.chomp(key)] = parser(_templates[key], opts);
-  }
+  files.forEach(function(filepath) {
+    filepath = path.resolve(filepath);
+    templates[filepath] = parser(filepath, templates, opts);
+  });
 
-	// Return a template runner
-  return function hdl(key, data) {
-    key  = util.chomp(key);
-    data = data || {};
+  return Bluebird
+    .props(templates)
+    .then(function(_templates) {
+      return function(key, data) {
+        key = path.normalize(key);
 
-    var ctx = {
-      self: hdl,
-      templates: templates,
-      data: data,
-      args: []
-    };
-
-    return {
-      sql: templates[key](ctx),
-      args: ctx.args
-    };
-  }
+        if(_templates.hasOwnProperty(key)) {
+          return _templates[key](data);
+        } else {
+          throw new errors.NoSuchTemplate(key);
+        }
+      }
+    })
+    .nodeify(callback);
 }

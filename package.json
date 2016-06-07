@@ -5,8 +5,8 @@
   "scripts": {
     "test": "mocha test/index.js",
     "coverage": "mocha test/index.js -r blanket -R mocha-term-cov-reporter",
-    "coverage-ci": "mocha test/index.js -r blanket -R mocha-lcov-reporter > lcov.info && codeclimate < lcov.info",
-    "benchmark": "node test/benchmark/index.js"
+    "coverage-ci": "mocha test/index.js -r blanket -R mocha-lcov-reporter > lcov.info && codeclimate-test-reporter < lcov.info",
+    "benchmark": "node test/benchmark/no-pre-compile.js; node test/benchmark/pre-compile.js"
   },
   "repository": {
     "type": "git",
@@ -31,12 +31,16 @@
     }
   ],
   "devDependencies": {
-    "blanket": "^1.1.7",
-    "codeclimate-test-reporter": "0.0.4",
-    "coveralls": "^2.11.2",
-    "lodash": "^3.9.1",
-    "mocha": "^2.2.4",
-    "mocha-lcov-reporter": "0.0.2",
-    "mocha-term-cov-reporter": "^0.2.0"
+    "benchmark": "^2.1.0",
+    "blanket": "^1.2.3",
+    "codeclimate-test-reporter": "^0.3.2",
+    "coveralls": "^2.11.9",
+    "mocha": "^2.5.3",
+    "mocha-lcov-reporter": "^1.2.0",
+    "mocha-term-cov-reporter": "^0.2.3"
+  },
+  "dependencies": {
+    "bluebird": "^3.4.0",
+    "lodash.assign": "^4.0.9"
   }
 }

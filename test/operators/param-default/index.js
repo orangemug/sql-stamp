@@ -1,50 +1,56 @@
-var assert  = require("assert");
-var genTest = require("../../util/gen-test");
+var assert     = require("assert");
+var sqlStamp   = require("../../../");
+var util       = require("../../util");
 
-var opts = {
-	sqlFiles: ["./in.sql"],
-	resultFiles: ["./out.sql"]
-}
+var results = util.readSync([
+  "./out.sql",
+], __dirname);
 
-genTest(__dirname, opts, function(tmpl, results) {
-	describe("param-default", function() {
+describe("param-default", function() {
+  var tmpl;
 
-		it("should work", function() {
-			var out = tmpl("./in.sql", {
-				name: "orangemug",
-				role: "dev"
-			});
+  before(function() {
+    return sqlStamp([__dirname+"/in.sql"], {})
+      .then(function(_tmpl) {
+        tmpl = _tmpl;
+      });
+  });
 
-			assert.equal(out.args.length, 3);
-			assert.equal(out.args[0], "orangemug");
-			assert.equal(out.args[1], "dev");
-			assert.equal(out.args[2], "orangemug");
-			assert.equal(out.sql, results["./out.sql"]);
-		});
+  it("should work", function() {
+    var out = tmpl(__dirname+"/in.sql", {
+      name: "orangemug",
+      role: "dev"
+    });
 
-		it("should work with defaults", function() {
-			var out = tmpl("./in.sql", {
-				name: "orangemug"
-			});
+    assert.equal(out.args.length, 3);
+    assert.equal(out.args[0], "orangemug");
+    assert.equal(out.args[1], "dev");
+    assert.equal(out.args[2], "orangemug");
+    assert.equal(out.sql, results["./out.sql"]);
+  });
 
-			assert.equal(out.args.length, 3);
-			assert.equal(out.args[0], "orangemug");
-			assert.equal(out.args[1], "manager");
-			assert.equal(out.args[2], "orangemug");
-			assert.equal(out.sql, results["./out.sql"]);
-		});
+  it("should work with defaults", function() {
+    var out = tmpl(__dirname+"/in.sql", {
+      name: "orangemug"
+    });
 
-		it("should throw error on missing key", function() {
-			var thrownErr;
+    assert.equal(out.args.length, 3);
+    assert.equal(out.args[0], "orangemug");
+    assert.equal(out.args[1], "manager");
+    assert.equal(out.args[2], "orangemug");
+    assert.equal(out.sql, results["./out.sql"]);
+  });
 
-			try {
-				tmpl("./in.sql", {});
-			} catch(err) {
-				thrownErr = err;
-			}
+  it("should throw error on missing key", function() {
+    var thrownErr;
 
-			assert(thrownErr);
-			assert.equal(thrownErr.message, "Missing key 'name'");
-		});
-	});
+    try {
+      tmpl(__dirname+"/in.sql", {});
+    } catch(err) {
+      thrownErr = err;
+    }
+
+    assert(thrownErr);
+    assert.equal(thrownErr.message, "Missing key 'name'");
+  });
 });

@@ -7,7 +7,7 @@ var results = util.readSync([
 ], __dirname);
 
 
-describe("raw", function() {
+describe("no-operator", function() {
   var tmpl;
 
   before(function() {
@@ -18,24 +18,7 @@ describe("raw", function() {
   });
 
   it("should work", function() {
-    var out = tmpl(__dirname+"/in.sql", {
-      filter: "foo"
-    });
-
-    assert.equal(out.args.length, 0);
+    var out = tmpl(__dirname+"/in.sql", {});
     assert.equal(out.sql, results["./out.sql"]);
-  });
-
-  it("should throw error on missing key", function() {
-    var thrownErr;
-
-    try {
-      tmpl(__dirname+"/in.sql", {});
-    } catch(err) {
-      thrownErr = err;
-    }
-
-    assert(thrownErr);
-    assert.equal(thrownErr, "Missing key 'filter'");
   });
 });

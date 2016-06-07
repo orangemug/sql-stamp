@@ -1,6 +1,7 @@
-var assert         = require("assert");
-var sqlStamp       = require("../../");
-var fetchTemplates = require("./../util/fetch-templates");
+var assert   = require("assert");
+var sqlStamp = require("../../");
+var util     = require("./../util");
+var path     = require("path");
 
 var opts = {
   prettyErrors: true
@@ -8,66 +9,53 @@ var opts = {
 
 describe("pretty-errors", function() {
 
-  it("throw too-many-args", function() {
-    var thrownErr;
-    var files   = fetchTemplates(["./sql/too-many-args.sql"],  __dirname);
-    var results = fetchTemplates(["./errs/too-many-args.txt"], __dirname);
+  it("throw too-many-args", function(done) {
+    var results = util.readSync(["./errs/too-many-args.txt"], __dirname);
 
-    try {
-      sqlStamp(files, opts);
-    } catch(err) {
-      thrownErr = err;
-    }
-
-    assert(thrownErr);
-    assert.equal(thrownErr.toString(), results["./errs/too-many-args.txt"]);
+    sqlStamp([__dirname+"/sql/too-many-args.sql"], opts, function(err) {
+      assert(err);
+      assert.equal(util.chomp(err.toString()), results["./errs/too-many-args.txt"]);
+      done();
+    });
   });
 
-  it("throw too-few-args", function() {
-    var thrownErr;
-    var files   = fetchTemplates(["./sql/too-few-args.sql"],  __dirname);
-    var results = fetchTemplates(["./errs/too-few-args.txt"], __dirname);
+  it("throw too-few-args", function(done) {
+    var results = util.readSync(["./errs/too-few-args.txt"], __dirname);
 
-    try {
-      sqlStamp(files, opts);
-    } catch(err) {
-      thrownErr = err;
-    }
-
-    assert(thrownErr);
-    assert.equal(thrownErr.toString(), results["./errs/too-few-args.txt"]);
+    sqlStamp([__dirname+"/sql/too-few-args.sql"], opts, function(err) {
+      assert(err);
+      assert.equal(util.chomp(err.toString()), results["./errs/too-few-args.txt"]);
+      done();
+    });
   });
 
-  it("throw no-such-template", function() {
-    var thrownErr;
-    var files   = fetchTemplates(["./sql/no-such-template.sql"],  __dirname);
-    var results = fetchTemplates(["./errs/no-such-template.txt"], __dirname);
+  it("throw no-such-template", function(done) {
+    var results = util.readSync(["./errs/no-such-template.txt"], __dirname);
+    var errStr = results["./errs/no-such-template.txt"]
+      .replace("%filepath%", path.resolve(__dirname+"/sql/no-such-file.sql"))
 
-    try {
-      var tmpl = sqlStamp(files, opts);
-      tmpl("./sql/no-such-template.sql", {});
-    } catch(err) {
-      thrownErr = err;
-    }
-
-    assert(thrownErr);
-    assert.equal(thrownErr.toString(), results["./errs/no-such-template.txt"]);
+    sqlStamp([__dirname+"/sql/no-such-template.sql"], opts, function(err) {
+      assert(err);
+      assert.equal(util.chomp(err.toString()), errStr);
+      done();
+    });
   });
 
-  it("throw missing-key", function() {
-    var thrownErr;
-    var files   = fetchTemplates(["./sql/missing-key.sql"],  __dirname);
-    var results = fetchTemplates(["./errs/missing-key.txt"], __dirname);
+  it("throw missing-key", function(done) {
+    var results = util.readSync(["./errs/missing-key.txt"], __dirname);
 
-    try {
-      var tmpl = sqlStamp(files, opts);
-      tmpl("./sql/missing-key.sql", {});
-    } catch(err) {
-      thrownErr = err;
-    }
+    sqlStamp([__dirname+"/sql/missing-key.sql"], opts, function(err, tmpl) {
+      var thrownErr;
+      try {
+        tmpl(__dirname+"/sql/missing-key.sql", {});
+      } catch(err) {
+        thrownErr = err;
+      }
 
-    assert(thrownErr);
-    assert.equal(thrownErr.toString(), results["./errs/missing-key.txt"]);
+      assert(thrownErr);
+      assert.equal(util.chomp(thrownErr.toString()), results["./errs/missing-key.txt"]);
+      done();
+    });
   });
 
 });

@@ -1,29 +1,38 @@
-var assert  = require("assert");
-var genTest = require("../../util/gen-test");
+var assert     = require("assert");
+var sqlStamp   = require("../../../");
+var util       = require("../../util");
 
-var opts = {
-	sqlFiles: ["./in.sql"],
-	resultFiles: ["./out.falsey.sql", "./out.truthy.sql"]
-}
+var results = util.readSync([
+  "./out.falsey.sql",
+  "./out.truthy.sql"
+], __dirname);
 
-genTest(__dirname, opts, function(tmpl, results) {
-	describe("feature-default", function() {
-		it("should enable on truthy", function() {
-			var out = tmpl("./in.sql", {
-				searchDisabled: true
-			});
 
-			assert.equal(out.args.length, 0);
-			assert.equal(out.sql, results["./out.truthy.sql"]);
-		});
+describe("feature-default", function() {
+  var tmpl;
 
-		it("should enable on falsey", function() {
-			var out = tmpl("./in.sql", {
-				searchDisabled: false
-			});
+  before(function() {
+    return sqlStamp([__dirname+"/in.sql"], {})
+      .then(function(_tmpl) {
+        tmpl = _tmpl;
+      });
+  });
 
-			assert.equal(out.args.length, 0);
-			assert.equal(out.sql, results["./out.falsey.sql"]);
-		});
-	});
+  it("should enable on truthy", function() {
+    var out = tmpl(__dirname+"/in.sql", {
+      searchDisabled: true
+    });
+
+    assert.equal(out.args.length, 0);
+    assert.equal(out.sql, results["./out.truthy.sql"]);
+  });
+
+  it("should enable on falsey", function() {
+    var out = tmpl(__dirname+"/in.sql", {
+      searchDisabled: false
+    });
+
+    assert.equal(out.args.length, 0);
+    assert.equal(out.sql, results["./out.falsey.sql"]);
+  });
 });

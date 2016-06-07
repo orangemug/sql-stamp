@@ -1,1 +1,6 @@
-select * from nested where foo = "{!foo}"
+select
+  *
+from
+  nested
+where
+  foo = "{!foo}"

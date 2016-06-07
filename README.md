@@ -1,5 +1,5 @@
 # sql-stamp
-The tiny SQL templater, with the aim to be as simple as possible so to not get in the way of you writing SQL.
+The tiny SQL templating library, with the aim to be as simple as possible so to not get in the way of you writing SQL.
 
 [![Build Status](https://travis-ci.org/orangemug/sql-stamp.svg?branch=master)](https://travis-ci.org/orangemug/sql-stamp) 
 [![Test Coverage](https://codeclimate.com/github/orangemug/sql-stamp/badges/coverage.svg)](https://codeclimate.com/github/orangemug/sql-stamp/coverage) 
@@ -10,10 +10,14 @@ The tiny SQL templater, with the aim to be as simple as possible so to not get i
 
 It supports the following conditionals:
 
- * `{key, optionalDefault}`  - Turns args into `?` with an optional default
+ * `{=key, optionalDefault}`  - Turns args into `?` with an optional default
  * `{!key, optionalDefault}` - Passed raw into the SQL
  * `{>path, optionalDataKey}` - Require file from the templates
  * `{?key, replaceTruthy, replaceFalsey}` - Ternary switch, the defaults are replaceTruthy/replaceFalsey === true/false
+
+
+## Why?
+I guess the best way to answer that is why not a HTML templating language like mustache? Basically these support loops and conditionals sql-stamp doesn't because I want the SQL to be kept clean and readable. It does however support a limited ternary switch for feature switches. Also it'll add in `?` as params so you can use your SQL libraries injection protection.
 
 
 ## Install
@@ -25,15 +29,19 @@ It supports the following conditionals:
 The API is as follows
 
     var sqlStamp = require("sql-stamp");
-    var tmpl = sqlStamp({
-      /* Pass a list of templates... (key=path, value=sql-string) */
-      "./friends.sql": "SQL_STRING",
-      "./example.sql": "SQL_STRING"
+    var tmpl = sqlStamp([
+      /* Pass a list of SQL templates */
+      __dirname+"/friends.sql",
+      __dirname+"/example.sql"
+    ]).then(function(sql) {
+      // 'sql' call with 'sql(pathToFile, args)' to exec the template
     });
 
-    var sql = sqlStamp("./sql/**/*.sql", callback); // => Promise
-    sql(__dirname+"../lib/sql/foo.sql", {foo: "bar"}); // => Promise
-    sql("./lib/sql/foo.sql", {foo: "bar"}, callback); // => Promise
+    var files = glob.sync("./sql/**/*.sql")
+    sqlStamp(files).then(function(sql) {
+      sql(__dirname+"../lib/sql/foo.sql", {foo: "bar"});
+      // => {sql: "select...", args: ["bar"]}
+    });
 
 So for example given the following SQL file which selects all friend requests you've accepted
 
@@ -59,7 +67,7 @@ The following file can **require** this as a CTE (<http://www.postgresql.org/doc
 
 When we run the following
 
-    var out = tmpl("./example.sql", {
+    var out = tmpl(__dirname+"/example.sql", {
       accountId: 1,
       filterDisabled: false,
       filterKey: "role",
@@ -89,12 +97,8 @@ The following will be returned
     }
 
 
-## Pretty errors
-There is also experimental support for more descriptive errors and can be enabled with `{prettyErrors: true}`
-
-    var tmpl = sqlStamp(templates, {prettyErrors: true});
-
-Then you'll get more descriptive errors about where the error happened in your source SQL
+## Errors
+You'll get more descriptive errors about where the error happened in your source SQL. This can be disabled with `{prettyErrors: false}`
 
     SQLError: Too many args
 
@@ -110,12 +114,21 @@ You can see some more examples in the tests here [here](test/errors/index.js)
 
 
 ## Test
+Run the unit tests
 
     npm test
 
+Unit tests with code coverage
+
+    npm run coverage
+
+And some really simple benchmarks
+
+    npm run benchmark
+
 
 ## Thanks
-Thanks to [Pearlshare](http://www.pearlshare.com) for supporting dev and [Oliver Brooks](https://github.com/oliverbrooks/) for help with design.
+Thanks to [Pearlshare](http://www.pearlshare.com) for supporting development and [Oliver Brooks](https://github.com/oliverbrooks/) for help with design.
 
 
 ## License

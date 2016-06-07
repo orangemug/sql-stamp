@@ -3,5 +3,5 @@ select
 from
   account
 where
-  foo = {}
+  foo = {=}
   AND bar = "baz"

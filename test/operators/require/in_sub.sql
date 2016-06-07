@@ -1,1 +1,6 @@
-select * from account where name = {name}
+select
+  *
+from
+  account
+where
+  name = {=name}
