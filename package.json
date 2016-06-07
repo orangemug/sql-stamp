@@ -32,14 +32,14 @@
   ],
   "devDependencies": {
     "blanket": "^1.1.7",
-    "codeclimate-test-reporter": "0.0.4",
+    "codeclimate-test-reporter": "^0.3.2",
     "coveralls": "^2.11.2",
-    "lodash": "^3.9.1",
     "mocha": "^2.2.4",
     "mocha-lcov-reporter": "0.0.2",
-    "mocha-term-cov-reporter": "^0.2.0"
+    "mocha-term-cov-reporter": "^0.2.3"
   },
   "dependencies": {
-    "bluebird": "^2.9.27"
+    "bluebird": "^2.9.27",
+    "lodash.assign": "^4.0.9"
   }
 }

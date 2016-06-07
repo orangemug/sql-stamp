@@ -1,4 +1,4 @@
-var lodash   = require("lodash");
+var assign   = require("lodash.assign");
 var path     = require("path");
 var Bluebird = require("bluebird");
 var util     = require("./lib/util");
@@ -13,7 +13,7 @@ var errors   = require("./lib/errors");
  * @return {Promise}
  */
 module.exports = function(files, opts, callback) {
-  opts = lodash.assign({
+  opts = assign({
     prettyErrors: false
   }, opts);
 
