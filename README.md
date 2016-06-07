@@ -16,6 +16,10 @@ It supports the following conditionals:
  * `{?key, replaceTruthy, replaceFalsey}` - Ternary switch, the defaults are replaceTruthy/replaceFalsey === true/false
 
 
+## Why?
+I guess the best way to answer that is why not a HTML templating language like mustache? Basically these support loops and conditionals sql-stamp doesn't because I want the SQL to be kept clean and readable. It does however support a limitted ternary switch for feature switches. Also it'll add in `?` as params so you can use your SQL libraries injection protection.
+
+
 ## Install
 
     npm i sql-stamp --save
