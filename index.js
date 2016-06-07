@@ -1,7 +1,6 @@
 var assign   = require("lodash.assign");
 var path     = require("path");
 var Bluebird = require("bluebird");
-var util     = require("./lib/util");
 var parser   = require("./lib/parser");
 var errors   = require("./lib/errors");
 
