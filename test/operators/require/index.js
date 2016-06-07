@@ -39,6 +39,19 @@ describe("require", function() {
     assert.equal(out.sql, results["./out.sql"]);
   });
 
+  it("should allow complex paths", function() {
+    var out = tmpl1(__dirname+"/../../../test/operators/require/in.sql", {
+      name: "orangemug",
+      nested_var: {
+        foo: "bar"
+      }
+    });
+
+    assert.equal(out.args.length, 1);
+    assert.equal(out.args[0], "orangemug");
+    assert.equal(out.sql, results["./out.sql"]);
+  });
+
   it("should throw error on missing template", function() {
     var thrownErr;
 
