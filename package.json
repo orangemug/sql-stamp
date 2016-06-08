@@ -39,6 +39,7 @@
     "mocha-lcov-reporter": "^1.2.0",
     "mocha-term-cov-reporter": "^0.2.3"
   },
+  "license": "MIT",
   "dependencies": {
     "bluebird": "^3.4.0",
     "lodash.assign": "^4.0.9"
