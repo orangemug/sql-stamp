@@ -1,7 +1,11 @@
-WITH some_cte AS (
-  {> ./in_sub.sql}
+WITH spread_cte AS (
+  {> ./in_sub.sql, ...user}
 ),
-some_other_cte AS (
-  {> ./in_sub_nested.sql, ...nested_var}
+object_cte AS (
+  {> ./in_sub.sql, user.id}
+),
+key_cte AS (
+  {> ./in_sub.sql, id:user.id}
 )
-select * from some_cte, some_other_cte
+/* This is a totally pointless example, but tests what we want */
+select * from spread_cte, object_cte, key_cte;
