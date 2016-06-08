@@ -15,7 +15,7 @@ It supports the following conditionals:
  * `{?key, replaceTruthy, replaceFalsey}` - Ternary switch, the defaults are replaceTruthy/replaceFalsey === true/false
  * `{>path, optionalDataKeys*}` - Require file from the templates, the data keys can take on the format
    * `{>path id:user.id}` - pass `user.id` as `id`
-   * `{>path status}` - pass `status` as `status`
+   * `{>path user.id}` - pass `user.id` as `id`
    * `{>path ...user}` - object spread, in the same way as javascript [ES6 spread operator](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Spread_operator)
 
 
