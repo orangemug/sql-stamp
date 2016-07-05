@@ -30,7 +30,7 @@ I guess the best way to answer that is why not a HTML templating language like m
 ## Install
 
 ```sh
-npm i sql-stamp --save
+npm install sql-stamp --save
 ```
 
 ## API
