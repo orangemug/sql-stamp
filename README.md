@@ -95,23 +95,26 @@ The following will be returned
 ```js
 {
   args: [1, "dev"],
-  sql: /* SQL in comment below */
-  /**
-   * WITH friend AS (
-   *   select * from friends where status = "active"
-   * )
-   * select
-   *   *
-   * from
-   *   account
-   * where
-   *   account.id = friend.toId
-   *   AND friend.fromId = ?
-   *   AND (
-   *     /*feature:filterDisabled*/ false AND role = ?
-   *   )
-   */
+  sql: SQL
 }
+```
+
+Where `SQL` is
+
+```sql
+WITH friend AS (
+  select * from friends where status = "active"
+)
+select
+  *
+from
+  account
+where
+  account.id = friend.toId
+  AND friend.fromId = ?
+  AND (
+    /*feature:filterDisabled*/ false AND role = ?
+  )
 ```
 
 ## Errors
