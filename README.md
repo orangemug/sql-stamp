@@ -1,9 +1,9 @@
 # sql-stamp
 The tiny SQL templating library, with the aim to be as simple as possible so to not get in the way of you writing SQL.
 
-[![Build Status](https://travis-ci.org/orangemug/sql-stamp.svg?branch=master)](https://travis-ci.org/orangemug/sql-stamp) 
-[![Test Coverage](https://codeclimate.com/github/orangemug/sql-stamp/badges/coverage.svg)](https://codeclimate.com/github/orangemug/sql-stamp/coverage) 
-[![Code Climate](https://codeclimate.com/github/orangemug/sql-stamp/badges/gpa.svg)](https://codeclimate.com/github/orangemug/sql-stamp) 
+[![Build Status](https://travis-ci.org/orangemug/sql-stamp.svg?branch=master)](https://travis-ci.org/orangemug/sql-stamp)
+[![Test Coverage](https://codeclimate.com/github/orangemug/sql-stamp/badges/coverage.svg)](https://codeclimate.com/github/orangemug/sql-stamp/coverage)
+[![Code Climate](https://codeclimate.com/github/orangemug/sql-stamp/badges/gpa.svg)](https://codeclimate.com/github/orangemug/sql-stamp)
 [![Dependency Status](https://david-dm.org/orangemug/sql-stamp.svg)](https://david-dm.org/orangemug/sql-stamp)
 [![Dev Dependency Status](https://david-dm.org/orangemug/sql-stamp/dev-status.svg)](https://david-dm.org/orangemug/sql-stamp#info=devDependencies)
 
@@ -112,6 +112,23 @@ You'll get more descriptive errors about where the error happened in your source
 
 You can see some more examples in the tests here [here](test/errors/index.js)
 
+## Sync API
+
+sql-stamp has a synchronous API. This is useful for processing SQL templates and exporting from node modules.
+
+```js
+    var sqlStamp = require("sql-stamp/sync");
+    var templater = sqlStamp([
+      /* Pass a list of SQL templates */
+      __dirname+"/friends.sql",
+      __dirname+"/example.sql"
+    ]);
+    templater1(__dirname+"/example.sql", {foo: "bar"}); // => {sql: "select...", args: ["bar"]}
+
+    var files = glob.sync("./sql/**/*.sql")
+    var templater2 = sqlStamp(files);
+    templater2(__dirname+"../lib/sql/foo.sql", {foo: "bar"}); // => {sql: "select...", args: ["bar"]}
+```
 
 ## Test
 Run the unit tests
