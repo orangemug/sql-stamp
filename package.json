@@ -1,7 +1,7 @@
 {
   "name": "sql-stamp",
   "description": "The tiny SQL templater",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "scripts": {
     "test": "mocha test/index.js",
     "coverage": "mocha test/index.js -r blanket -R mocha-term-cov-reporter",
@@ -39,6 +39,7 @@
     "mocha-lcov-reporter": "^1.2.0",
     "mocha-term-cov-reporter": "^0.2.3"
   },
+  "license": "MIT",
   "dependencies": {
     "bluebird": "^3.4.0",
     "lodash.assign": "^4.0.9",
