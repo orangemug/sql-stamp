@@ -11,3 +11,5 @@ require("./functional");
 
 // Experimental advanced error support
 require("./errors");
+
+require("./issues");
