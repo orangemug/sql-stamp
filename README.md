@@ -12,8 +12,11 @@ It supports the following conditionals:
 
  * `{=key, optionalDefault}`  - Turns args into `?` with an optional default
  * `{!key, optionalDefault}` - Passed raw into the SQL
- * `{>path, optionalDataKey}` - Require file from the templates
  * `{?key, replaceTruthy, replaceFalsey}` - Ternary switch, the defaults are replaceTruthy/replaceFalsey === true/false
+ * `{>path, optionalDataKeys*}` - Require file from the templates, the data keys can take on the format
+   * `{>path id:user.id}` - pass `user.id` as `id`
+   * `{>path user.id}` - pass `user.id` as `id`
+   * `{>path ...user}` - object spread, in the same way as javascript [ES6 spread operator](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Spread_operator)
 
 
 ## Why?
