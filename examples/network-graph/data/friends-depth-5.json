@@ -1,0 +1,9 @@
+{
+  "user": {
+    "id": 1
+  },
+  "maxDepth": 5,
+  "enableStatusFilter": false,
+  "enableRoleFilter": false,
+  "roleFilter": null
+}
