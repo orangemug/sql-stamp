@@ -32,7 +32,7 @@ describe("pretty-errors", function() {
   it("throw no-such-template", function(done) {
     var results = util.readSync(["./errs/no-such-template.txt"], __dirname);
     var errStr = results["./errs/no-such-template.txt"]
-      .replace("%filepath%", path.resolve(__dirname+"/sql/no-such-file.sql"))
+      .replace("%filepath%", path.resolve(__dirname+"/sql/no-such-file.sql"));
 
     sqlStamp([__dirname+"/sql/no-such-template.sql"], opts, function(err) {
       assert(err);
