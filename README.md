@@ -1,11 +1,13 @@
 # sql-stamp
 The tiny SQL templating library, with the aim to be as simple as possible so to not get in the way of you writing SQL.
 
+[![stability-unstable](https://img.shields.io/badge/stability-unstable-yellow.svg)][stability]
 [![Build Status](https://circleci.com/gh/orangemug/sql-stamp.png?style=shield)][circleci]
 [![Test Coverage](https://codeclimate.com/github/orangemug/sql-stamp/badges/coverage.svg)][codeclimate]
 [![Dependency Status](https://david-dm.org/orangemug/sql-stamp.svg)][dm-prod]
 [![Dev Dependency Status](https://david-dm.org/orangemug/sql-stamp/dev-status.svg)][dm-dev]
 
+[stability]:   https://github.com/orangemug/stability-badges#unstable
 [circleci]:    https://circleci.com/gh/orangemug/sql-stamp
 [codeclimate]: https://codeclimate.com/github/orangemug/sql-stamp/coverage
 [dm-prod]:     https://david-dm.org/orangemug/sql-stamp
