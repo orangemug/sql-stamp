@@ -1,17 +1,26 @@
-WITH some_cte AS (
+WITH spread_cte AS (
   select
     *
   from
     account
   where
-    name = ?
+    id = ?
 ),
-some_other_cte AS (
+object_cte AS (
   select
     *
   from
-    nested
+    account
   where
-    foo = "bar"
+    id = ?
+),
+key_cte AS (
+  select
+    *
+  from
+    account
+  where
+    id = ?
 )
-select * from some_cte, some_other_cte
+/* This is a totally pointless example, but tests what we want */
+select * from spread_cte, object_cte, key_cte;

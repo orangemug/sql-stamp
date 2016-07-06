@@ -5,5 +5,5 @@ from
 where
   status = "active"
   AND (
-    /*feature:searchDisabled*/ true OR text LIKE "foo%"
+    /*feature:searchDisabled*/ 1 OR text LIKE "foo%"
   )

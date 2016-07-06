@@ -1,8 +1,9 @@
 {
   "name": "sql-stamp",
   "description": "The tiny SQL templater",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "scripts": {
+    "lint": "./node_modules/.bin/eslint lib/ test/",
     "test": "mocha test/index.js",
     "coverage": "mocha test/index.js -r blanket -R mocha-term-cov-reporter",
     "coverage-ci": "mocha test/index.js -r blanket -R mocha-lcov-reporter > lcov.info && codeclimate-test-reporter < lcov.info",
@@ -35,6 +36,7 @@
     "blanket": "^1.2.3",
     "codeclimate-test-reporter": "^0.3.2",
     "coveralls": "^2.11.9",
+    "eslint": "^3.0.1",
     "mocha": "^2.5.3",
     "mocha-lcov-reporter": "^1.2.0",
     "mocha-term-cov-reporter": "^0.2.3"
@@ -42,6 +44,7 @@
   "license": "MIT",
   "dependencies": {
     "bluebird": "^3.4.0",
-    "lodash.assign": "^4.0.9"
+    "lodash.assign": "^4.0.9",
+    "obj-by-path": "orangemug/obj-by-path"
   }
 }
