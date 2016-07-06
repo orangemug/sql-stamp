@@ -5,6 +5,7 @@ require("./operators/param-default");
 require("./operators/raw");
 require("./operators/require");
 require("./operators/no-operator");
+require("./parser/regex");
 
 // Full end-to-end test
 require("./functional");
