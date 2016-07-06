@@ -37,4 +37,4 @@ module.exports = function(files, opts, callback) {
       }
     })
     .nodeify(callback);
-}
+};

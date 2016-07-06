@@ -136,6 +136,23 @@ where
 
 You can see some more examples in the tests here [here](test/errors/index.js)
 
+## Sync API
+
+sql-stamp has a synchronous API. This is useful for processing SQL templates and exporting from node modules.
+
+```js
+    var sqlStamp = require("sql-stamp/sync");
+    var templater = sqlStamp([
+      /* Pass a list of SQL templates */
+      __dirname+"/friends.sql",
+      __dirname+"/example.sql"
+    ]);
+    templater1(__dirname+"/example.sql", {foo: "bar"}); // => {sql: "select...", args: ["bar"]}
+
+    var files = glob.sync("./sql/**/*.sql")
+    var templater2 = sqlStamp(files);
+    templater2(__dirname+"../lib/sql/foo.sql", {foo: "bar"}); // => {sql: "select...", args: ["bar"]}
+```
 
 ## Test
 Run the unit tests
