@@ -9,24 +9,26 @@ var results = util.readSync([
 describe("end-to-end", function() {
   var tmpl;
 
-  before(function(done) {
-    sqlStamp([
+  before(function() {
+    tmpl = sqlStamp.sync([
       __dirname+"/example.sql",
       __dirname+"/friends.sql",
-    ], {}, function(err, _tmpl) {
-      tmpl = _tmpl;
-      done();
-    });
+    ]);
+
   });
 
 
-  it("should work", function() {
-    var out = tmpl(__dirname+"/example.sql", {
+  it.only("should work", function() {
+    console.log("tmpl", tmpl[__dirname+"/example.sql"])
+
+    var out = tmpl[__dirname+"/example.sql"]({
       accountId: 1,
       filterDisabled: false,
       filterKey: "role",
       filterVal: "dev"
     });
+
+    console.log("out", out);
 
     assert.equal(out.args.length, 2);
     assert.equal(out.args[0], 1);
